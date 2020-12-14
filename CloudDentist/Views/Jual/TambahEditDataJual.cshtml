@@ -1,0 +1,541 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.Transaksi
+@{
+    ViewData["Title"] = "TambahEditDataJual";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Page Content -->
+    <div class="content">
+        <h2 class="content-heading">Pemberian Obat & Resep</h2>
+        <p>Fasilitas ini digunakan untuk mencatat data anamnesis dan diagnosis pasien tiap pemeriksaaan</p>
+        <p>
+            <a id="ContentPlaceHolder1_linkObat" href="@Url.Action("list_transaksi_pasien", "Transaksi", new { id = @Context.Session.GetString("pasien_Periksa"), tenantid = @Context.Session.GetString("TenantID") })"> Rekam Medis </a>
+            <a id="ContentPlaceHolder1_linkObat" href="@Url.Action("Tambah_edit_Transaksi", "Transaksi", new { Id = @Model.IdTransaksi, tenantid = @Context.Session.GetString("TenantID") })"> | Anamnesis </a>
+            <a id="ContentPlaceHolder1_linkObat" href="@Url.Action("TambahEditDataTindakan", "Tindakan", new { idtransaksi = @Model.IdTransaksi,tenantid = @Context.Session.GetString("TenantID")})"> | Diagnosis </a>
+            <strong><span>| Pemberian Obat & Resep &amp; </span></strong>
+            <a id="ContentPlaceHolder1_linkObat" href="@Url.Action("Transaksi_Selesai", "Transaksi", new { idtransaksi = @Model.IdTransaksi })"> | Selesai </a>
+            <a id="con_selesai" href="@Url.Action("Transaksi_Batal", "Transaksi", new { idtransaksi = @Model.IdTransaksi })"> | Batalkan Pemeriksaan </a>
+        </p>
+
+        <!-- Dummy content -->
+        <div class="block">
+            <div class="block-content">
+                <form asp-action="TambahEditDataTindakan" asp-controller="Tindakan" method="post" id="form-add">
+                    @Html.HiddenFor(model => model.IdTransaksi)
+                    <div class="form-group row" hidden>
+                        <label class="col-lg-2 col-form-label">TenantID</label>
+                        <span> <input asp-for="TenantID" value="@Context.Session.GetString("TenantID")" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="IdTransaksi" class="col-lg-2 col-form-label">No Transaksi</label>
+                        <span> <input asp-for="IdTransaksi" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Tanggal</label>
+                        <span> <input asp-for="Tanggal" id="tanggal" type="date" class="form-control" readonly/></span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">ID Pasien</label>
+                        <span> <input asp-for="IdPasien" id="idpasien" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Dokter </label>
+                        <span> <input asp-for="Username" id="Username" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Anamnesis </label>
+                        <span> <input asp-for="Anamnesis" id="Anamnesis" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label>resep</label>
+                            <textarea asp-for="Resep" id="resep" class="form-control form-control-lg" rows="2" cols="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8">
+                            <button type="button" id="submitBtn" class="btn btn-primary min-width-125">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="block">
+            <div class="block-header block-header-default " id="tabbarang">
+                <h3 class="block-title">Penjualan<small></small></h3>
+                <button type="button" id="btn_barang" style="border-top-right-radius:initial" class="btn btn-primary min-width-125">Tambah Data Baru</button>
+            </div>
+            <div class="block-content" id="penjualan">
+                <form asp-action="tambahpenjualan" asp-controller="Tindakan" method="post" id="formBarang" hidden>
+                    @Html.HiddenFor(model => model.IdTransaksi)
+                    <div class="form-group row" hidden>
+                        <label class="col-lg-2 col-form-label">TenantID</label>
+                        <span> <input asp-for="TenantID" id="tenantid" value="@Context.Session.GetString("TenantID")" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row" hidden>
+                        <span><input id="idbarang" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row" hidden>
+                        <span><input id="idJual" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Barang</label>
+                        <span> <input id="namaBarang" class="form-control" readonly /></span>&nbsp;&nbsp;
+                        <span><button type="button" id="btn_caribarang" class="btn btn-info colorpicker-clear">cari barang</button></span>
+                    </div>
+                    <div id="barang">
+                        <table id="tabelbarang" class="dataTable" cellspacing="0" border="1" style="border-collapse:collapse" hidden>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nama Barang</th>
+                                    <th>Harga</th>
+                                    <th>SubTotal</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <br />
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Harga Satuan</label>
+                            <span> <input id="hargasatuan" class="form-control" readonly /></span>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Qty</label>
+                            <span> <input id="Qty" class="form-control" /></span>
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                            <div class="col-lg-8">
+                                <button type="button" id="Btn_submitjual" class="btn btn-primary ">Simpan</button>
+                                <button type="button" id="Btn_editJual" class="btn btn-info min-width-100" hidden>Edit</button>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                </form>
+                <br />
+                <div class="col-md-12 py-2" style="margin-left:auto">
+                    <h3 class="h4 font-w700 border-b border-10x"> </h3>
+                </div>
+                <div class="col-lg-12">
+                    <table id="tabeljual" class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                        <thead>
+                            <tr>
+                                <th>Nama Barang</th>
+                                <th>Qty</th>
+                                <th>Harga</th>
+                                <th>SubTotal</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Jual)
+
+                            {
+                                <tr>
+                                    <td>@item.Barang.NamaBarang</td>
+                                    <td>@item.Qty</td>
+                                    <td>@item.Barang.Harga</td>
+                                    <td>@item.Harga</td>
+                                    <td class="d-none d-sm-table-cell">
+                                        <a onclick="EditDataJual('@item.IdJual')" class="btn btn-sm btn-secondary m-5"><i class="fa fa-pencil text-primary mr-5">Edit</i></a>
+                                        <a onclick="DeleteJual('@item.IdJual')" class="btn btn-sm btn-secondary m-5"><i class="fa fa-times text-danger mr-5">Delete</i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12 py-2" style="margin-left:auto">
+                    <h3 class="h4 font-w700 border-b border-10x"> </h3>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-2 col-form-label">Total Bayar Obat </label>
+                    <span> <input asp-for="TotalJual" id="totalobat" class="form-control" inputmode="numeric" readonly /></span>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-2 col-form-label">Total Bayar Tindakan </label>
+                    <span> <input asp-for="TotalBayarTindakan" id="totaltindakan" class="form-control" inputmode="numeric" readonly /></span>
+                </div>
+                <div class="col-md-12 py-2" style="margin-left:auto">
+                    <h3 class="h4 font-w700 border-b border-10x"> </h3>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-2 col-form-label">Total Pembayaran </label>
+                    <span> <input asp-for="TotalBayar" id="totalbayar" class="form-control" inputmode="numeric" readonly /></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="~/assets/js/core/jquery.min.js"></script>
+@*<script src="~/assets/js/codebase.core.min.js"></script>*@
+<script src="~/assets/js/codebase.app.min.js"></script>
+<script src="~/assets/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+<script>
+        $('#submitBtn').click(function (event) {
+            event.preventDefault();
+            editDataTransaksi();
+        });
+        $('#Btn_submitjual').click(function (event) {
+            event.preventDefault();
+            saveDataJual();
+        });
+        $('#btn_barang').click(function (event) {
+
+            event.preventDefault();
+            $("#penjualan").attr("hidden", false);
+            $("#formBarang").attr("hidden", false);
+
+        });
+        $('#Btn_editJual').click(function (event) {
+            var IdJual = $('#idJual').val();
+            event.preventDefault();
+            saveEditDataJual();
+
+        });
+
+        function DeleteJual(Id) {
+            alertify.confirm('Data Kategori','Apakah anda yakin untuk menghapus data ini ?!', function (e) {
+                if (e) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "http://localhost:30512/api/Jual/" + Id,
+                       data: '{}',
+                        headers: {
+                            Authorization: 'Bearer ' + token,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        error: function (response, jqXHR) {
+                          
+                            swal("Hapus Data!!", "test", "error");
+                            if (response.status == 200) {
+                                swal("Hapus Data!!", response.responseText, "error");
+                                setTimeout(function () { window.location.reload(); }, 1200);
+                            }
+                            else {
+                                swal("ERROR", response.responseText, "error");
+                            }
+                        },
+                    });
+                }
+                else {
+                     swal("ERROR", "error", "error");
+                    alertify.error("You've clicked Cancel");
+
+                }
+            }, null);
+
+        }
+        $('#btn_caribarang').click('click', function () {
+
+            var namaBarang = $('#namaBarang').val();
+            if (namaBarang == '') {
+                $("#barang").attr("hidden", false);
+                $("#tabelbarang").attr("hidden", false);
+                showbarang();
+            }
+            else {
+
+                $("#barang").attr("hidden", false);
+                $("#tabelbarang").attr("hidden", false);
+            }
+        });
+        var token = '@Context.Session.GetString("JWTtoken")';
+        var gigi = document.forms["Tindakan"];
+        var array = [];
+        $(document).ready(function () {
+            //for (var i = 0; i < gigi.length; i++) {
+            //    array[i] = {kuadran : "", nomerGigi : ""}
+            //}
+        });
+        function saveDataJual() {
+            var token = '@Context.Session.GetString("JWTtoken")';
+            var url = $('#form-add').attr("action");
+            $.ajax({
+
+                url: "http://localhost:30512/api/Jual",
+                type: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+
+
+                dataType: "json",
+                data: JSON.stringify({
+                    'TenantID': $('#tenantid').val(),
+                    'idBarang': $('#idbarang').val(),
+                    'qty': $('#Qty').val(),
+                    'IdTransaksi': $('#IdTransaksi').val(),
+                    'harga': $('#hargasatuan').val(),
+
+                }),
+                success: function (data, textStatus, jqXHR) {
+                    console.log(jqXHR.status);
+                    if (jqXHR.status == 200) {
+
+
+                        $("#submitBtn").attr("hidden", true);
+                        $("#btnedit").attr("hidden", false);
+                        console.log(JSON.stringify(data));
+                        swal("Berhasil!", "Data Berhasil di tambah ", "success");
+                        setTimeout(function () { window.location.reload(); }, 1200);
+
+                    }
+
+
+                },
+                error: function (xhr, textStatus, errorThrown, jqXHR) {
+                    console.log(xhr.responseText);
+                    console.log(errorThrown);
+                    console.log(xhr);
+                    $("#submitBtn").attr("hidden", false);
+                    $("#btnedit").attr("hidden", true);
+                    swal("Kesalahan!!", xhr.responseText, "error");
+                    setTimeout(function () { window.location.reload(); }, 1200);
+
+                }
+
+
+            });
+        }
+        function Check1() {
+            var Resep = $('#resep').val();
+            if (Resep == '') {
+                $("#btnedit").attr("hidden", false);
+                $("#submitBtn").attr("hidden", false);
+                $("#penjualan").attr("hidden", true);
+                $("#tabbarang").attr("hidden", true);
+            }
+        }
+        var qty = -0
+    function showbarang() {
+            var token = '@Context.Session.GetString("JWTtoken")';
+            $.ajax({
+                url: "http://localhost:30512/api/Barang/getbarangtenantid/" + '@Context.Session.GetString("TenantID")',
+                type: "get",
+                data: '{}',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                contentType: "application/json; charset=utf-8",
+                success: OnSuccess,
+                failure: function (response) {
+                    alert(response);
+                },
+                error: function (response) {
+                    alert(response);
+                }
+            });
+        }
+        function OnSuccess(response) {
+            var stringfiy = JSON.parse(JSON.stringify(response));
+            var databarang = eval(stringfiy);
+            console.log(databarang[0].idBarang);
+            $("#tabelbarang").DataTable(
+                {
+                    bLengthChange: true,
+                    lengthMenu: [[5, 10, -1], [5, 10, "All"]],
+                    bFilter: true,
+                    bSort: true,
+                    bPaginate: true,
+                    data: databarang,
+                    columns: [{ 'data': 'idBarang' },
+                    { 'data': 'namaBarang' },
+                    { 'data': 'harga' },
+                    { 'data': 'stok' },
+                    {
+                        data: 'idBarang',
+                        render: function (data) {
+                            return "<a onclick=\"ambilDataBarang(" + data + ")\">Pilih</a>"
+                        }
+                    }]
+                });
+        };
+        $("#JenisTindakan").on("click", ".btn-barang", function () {
+            //ambilDataBarang(button.attr("dataIdBarang"));
+        });
+    function ambilDataBarang(idBarang) {
+        var token = '@Context.Session.GetString("JWTtoken")';
+        $.ajax({
+        url: "http://localhost:30512/api/Barang/" +idBarang,
+        method: "get",
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        success: function (data) {
+            document.getElementById('namaBarang').value = data.namaBarang;
+            document.getElementById('idbarang').value = data.idBarang;
+            document.getElementById('hargasatuan').value = data.harga;
+            
+            $("#tabelbarang").attr("hidden", true);
+            //model.idBarang.value = data.idBarang;
+        },
+        });
+
+    }
+    function EditDataJual(IdJual) {
+         var token = '@Context.Session.GetString("JWTtoken")';
+        $.ajax({
+        url: "http://localhost:30512/api/Jual/" +IdJual,
+        method: "get",
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+            success: function (data) {
+            $("#barang").attr("hidden", false);
+            $("#penjualan").attr("hidden", false);
+            $("#formBarang").attr("hidden", false);
+            $("#btn_caribarang").attr("hidden", true);
+            $("#Btn_editJual").attr("hidden", false);
+            $("#Btn_submitjual").attr("hidden", true);
+            document.getElementById('namaBarang').value = data.barang.namaBarang;
+            document.getElementById('Qty').value = data.qty;
+            document.getElementById('idbarang').value = data.idBarang;
+            document.getElementById('hargasatuan').value = data.barang.harga;
+            document.getElementById('idJual').value = data.idJual;
+
+                
+        },
+        });
+
+    }
+     function editDataTransaksi() {
+        var token = '@Context.Session.GetString("JWTtoken")';
+        var url = $('#form-add').attr("action");
+        $.ajax({
+
+            url: "http://localhost:30512/api/transaksi",
+            type: 'PUT',
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            dataType: "json",
+            data: JSON.stringify({
+                'idTransaksi': @Model.IdTransaksi,
+                'TenantID': $('#TenantID').val(),
+                'Username': $('#Username').val(),
+                'IdPasien': $('#idpasien').val(),
+                'Tanggal': $('#tanggal').val(),
+                'Anamnesis': $('#Anamnesis').val(),
+                'Resep': $('#resep').val(),
+
+            }),
+            success: function (data, textStatus, jqXHR) {
+                console.log(data);
+                console.log(jqXHR.status);
+                if (jqXHR.status == 200) {
+
+
+                    $("#submitBtn").attr("hidden", true);
+                    $("#btnedit").attr("hidden", false);
+                    console.log(JSON.stringify(data));
+                    if (data.hasOwnProperty("idTransaksi")) {
+                        var Id = data.idTransaksi;
+                        //var id = $.param(data.idTransaksi);
+                        //var url = "/Tindakan/" + id;
+                        console.log(url);
+                    }
+                    swal("Berhasil!", "Data Berhasil di tambah ", "success");
+                    var url = "/Jual/TambahEditDataJual?Id=" + @Model.IdTransaksi + "&tenantID=" + '@Context.Session.GetString("TenantID")';
+                    setTimeout(function () {  location.reload(); }, 1200);
+                }
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $("#submitBtn").attr("hidden", false);
+                $("#btnedit").attr("hidden", true);
+                swal("Kesalahan!!", data.textStatus, "error");
+            }
+
+
+        });
+    }
+        function saveEditDataJual() {
+        var token = '@Context.Session.GetString("JWTtoken")';
+        var url = $('#form-add').attr("action");
+        $.ajax({
+
+            url: "http://localhost:30512/api/jual",
+            type: 'PUT',
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+
+
+            dataType: "json",
+            data: JSON.stringify({
+                'idTransaksi': @Model.IdTransaksi,
+                'TenantID': $('#TenantID').val(),
+                'idBarang': $('#idbarang').val(),
+                'Qty': $('#Qty').val(),
+                'IdJual': $('#idJual').val(),
+                'Harga': $('#hargasatuan').val()
+
+            }),
+            success: function (data, textStatus, jqXHR) {
+                console.log(data);
+                console.log(jqXHR.status);
+                console.log(textStatus);
+                if (jqXHR.status == 200) {
+                    $("#submitBtn").attr("hidden", true);
+                    $("#btnedit").attr("hidden", false);
+                    console.log(JSON.stringify(data));
+                    swal("Berhasil!",jqXHR.responseText, "success");
+                    setTimeout(function () {  location.reload(); }, 1200);
+                }
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $("#submitBtn").attr("hidden", false);
+                $("#btnedit").attr("hidden", true);
+                swal("Kesalahan!!", data.textStatus, "error");
+            }
+
+
+        });
+    }
+</script>
+
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+}
+<script type="text/javascript">
+      var token = '@Context.Session.GetString("JWTtoken")';
+    $(document).ready(function () {
+        Check1();
+        getdatajual();
+        $("#btnedit").attr("hidden", false);
+        $("#JenisTindakan").attr("hidden", true);
+    });
+</script>

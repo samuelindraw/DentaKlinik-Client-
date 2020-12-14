@@ -1,0 +1,78 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.Prosentase
+@{
+    ViewData["Title"] = "Tambah_edit_dataprosentase";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Bootstrap Forms Validation -->
+<h2 class="content-heading">Form tambah atau edit data Prosentase</h2>
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Data Prosentase</h3>
+        <div class="block-options">
+            <button type="button" class="btn-block-option">
+                <i class="si si-wrench"></i>
+            </button>
+        </div>
+    </div>
+    <div class="block-content">
+        <div class="row justify-content-center py-20">
+            <div class="col-xl-6">
+                <!-- jQuery Validation functionality is initialized in js/pages/be_forms_validation.min.js which was auto compiled from _es6/pages/be_forms_validation.js -->
+                <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                <form asp-action="CreatePost" method="post">
+                    @Html.HiddenFor(model => model.IdProsentase)
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Username">Username :</label>
+                            <input asp-for="Username" class="form-control" />
+                            <span asp-validation-for="Username" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="IdJenisTindakan">Jenis Tindakan</label>
+                            <input asp-for="JenisTindakan.Jenis" class="form-control" disabled />
+                            @Html.HiddenFor(model => model.IdJenisTindakan)
+                            <span asp-validation-for="IdJenisTindakan" class="text-danger" />
+                        </div>
+                    </div>
+                    @*<div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="IdJenisTindakan">JenisTindakan</label>
+                            <select asp-for="IdJenisTindakan" asp-items="@Model.Jenis_Tindakan" class="form-control" id="Model"></select>
+                            <span asp-validation-for="IdJenisTindakan" class="text-danger"></span>
+                        </div>
+                    </div>*@
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Prosen">Prosen :</label>
+                            <input asp-for="Prosen" class="form-control" />
+                            <span asp-validation-for="Prosen" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12" hidden>
+                            <label asp-for="TenantID">TenantID :</label>
+                            <input asp-for="TenantID" class="form-control" />
+                            <span asp-validation-for="TenantID" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8 ml-auto">
+                            <input type="submit" value="Submit" class="btn btn-primary float-left" />
+                            <input type="submit" value="cancel" class="btn btn-danger float-right" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}
+<script src="~/assets/js/core/jquery.min.js"></script>
+
+

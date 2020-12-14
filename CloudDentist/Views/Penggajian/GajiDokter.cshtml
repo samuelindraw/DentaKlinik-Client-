@@ -1,0 +1,108 @@
+﻿@model CloudDentist.Models.Penggajian
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "GajiDokter";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Bootstrap Forms Validation -->
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Form Tambah Data Penggajian</h3>
+        <div class="block-options">
+            <button type="button" class="btn-block-option">
+                <i class="si si-wrench"></i>
+            </button>
+        </div>
+    </div>
+    <div class="block-content">
+        <div class="row justify-content-center py-20">
+            <div class="col-xl-6">
+                <!-- jQuery Validation functionality is initialized in js/pages/be_forms_validation.min.js which was auto compiled from _es6/pages/be_forms_validation.js -->
+                <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                <form asp-action="CreatePost" method="post">
+                    @Html.HiddenFor(model => model.IdGaji)
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Username">Username</label>
+                            <select class="form-control form-control-lg" id="Username" name="Username">
+                                @if (Model.Username == null)
+                                {
+                                    <option>Select Username</option>
+                                }
+                                else
+                                {
+                                    <option>@Model.Username</option>
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="TanggalGaji">TanggalGaji</label>
+                            <input asp-for="TanggalGaji" type="date" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="TanggalAwal">Tanggal Awal</label>
+                            <input asp-for="TanggalAwal" type="date" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="TanggalAkhir">Tanggal Akhir</label>
+                            <input asp-for="TanggalAkhir" type="date" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row" hidden>
+                        <label class="col-lg-2 col-form-label">Tenant</label>
+                        <span> <input asp-for="TenantID" type="text" value="@Context.Session.GetString("TenantID")" class="form-control" /></span>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8 ml-auto">
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            var options = {};
+            var obj = {};
+            obj.tenant =  ('@Context.Session.GetString("TenantID")');
+            obj.token = ('@Context.Session.GetString("JWTtoken")');
+            options.data = JSON.stringify(obj);
+            sessionStorage.setItem("token", obj.token);
+            sessionStorage.setItem("tenant", obj.tenant);
+            options.url = "http://localhost:30512/api/pengguna/getuserbyrole/" + sessionStorage.getItem("tenant") +"/"+ "Dokter";
+            options.type = "GET";
+            options.beforeSend = function (request) {
+            request.setRequestHeader("Authorization",
+            "Bearer " + sessionStorage.getItem("token"));
+            };
+                options.dataType = "json";
+                options.success = function (data) {
+                    data.forEach(function (element) {
+                        $("#Username").append("<option value='" + element.username + "'>" + element.username + "</option>");
+                    });
+                };
+                options.error = function () {
+                    $("#msg").html("Error while calling the Web API!");
+
+            };
+
+                $.ajax(options);
+            });
+</script>
+
+<!-- Bootstrap Forms Validation -->

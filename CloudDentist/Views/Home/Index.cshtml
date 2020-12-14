@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+@if (TempData["alert"] != null)
+{
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+    </script>
+}
+@if (TempData["success"] != null)
+{
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+    </script>
+}
+@if (TempData["error"] != null)
+{
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script>
+            swal("Berhasil", "@TempData["Pesan"]", "error");
+    </script>
+}
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Page Content -->
+    <div class="content">
+        <nav class="breadcrumb bg-white push">
+            <a class="breadcrumb-item" href="javascript:void(0)">Home</a>
+            <span class="breadcrumb-item active">Home Page</span>
+        </nav>
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">WELCOME - Cloudentist - Dental Clinic System <small></small></h3>
+            </div>
+            <div class="block-content">
+                <p>Selamat datang di Cloudentist - Dental Clinic System, Fitur yang disediakan pada aplikasi ini adalah:</p>
+                <ul>
+                    <li>Pengaturan Data Pasien</li>
+                    <li>Pengaturan Data Dokter</li>
+                    <li>Pengaturan Data Perawat</li>
+                    <li>Pengaturan Tindakan</li>
+                    <li>Pengaturan Prosentase</li>
+                    <li>Pengaturan Obat</li>
+                    <li>Pengaturan Pemesanan Gigi Palsu</li>
+                    <li>Pencatatan Transaksi Pembelian dan Penjualan</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- END Page Content -->

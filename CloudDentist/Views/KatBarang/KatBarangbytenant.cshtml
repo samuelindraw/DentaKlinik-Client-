@@ -1,0 +1,97 @@
+﻿@model IEnumerable<CloudDentist.Models.KatBarang>
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "KatBarangbytenant";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+@*<partial name="_NotificationPanel" />*@
+<!-- Dynamic Table Full Pagination -->
+<h5>Pengaturan Data Kategori Barang @Context.Session.GetString("Tenant")</h5>
+<p>Fasilitas ini digunakan untuk Pengaturan kateg ke dalam sistem</p>
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Kategori Barang<small></small></h3>
+        <a href="@Url.Action("TambaheditData","KatBarang")" class="btn btn-primary bottom-buffer" id="btn-add-databarang" style="float:right;"><i class="fa fa-plus"></i> Kategori Barang</a>
+    </div>
+
+    @if (TempData["alert"] != null)
+    {
+        <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (TempData["success"] != null)
+    {
+
+        <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+
+        <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    <div class="block-content block-content-full">
+        <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+        <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <thead>
+                <tr>
+                    <th>ID Tenant</th>
+                    <th>ID Kategori</th>
+                    <th>Nama Kategori</th>
+                    <th>Nama Tenant</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+
+                {
+                    <tr>
+                        <td>@item.TenantID</td>
+                        <td>@item.IdKategori</td>
+                        <td>@item.NamaKategori</td>
+                        <td>@item.Tenant.TenantName</td>
+                        @*<td class="d-none d-sm-table-cell">@string.Join(",", item.Barang.ToList().Select(x => x.NamaBarang))</td>
+                            <td class="d-none d-sm-table-cell"><a>@string.Join(",", item.Barang.ToList().Select(x => x.Stok))</a></td>*@
+                        <td class="d-none d-sm-table-cell">
+                            <a href="@Url.Action("TambahEditData", "KatBarang", new { id = item.IdKategori })" class="btn btn-sm btn-secondary m-5"><i class="fa fa-pencil text-primary mr-5">Edit</i></a>
+                            <a onclick="Delete(@item.IdKategori)" class="float-sm-right btn-sm btn-secondary m-5"><i class="fa fa-times text-danger mr-5">Delete</i></a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+</div>
+<!-- END Main Container -->
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script src="~/assets/js/codebase.core.min.js"></script>
+<script src="~/assets/js/codebase.app.min.js"></script>
+<script src="~/assets/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script type="text/javascript">
+    function Delete(Id) {s
+            alertify.confirm('Data Kategori', 'Apakah anda yakin untuk menghapus data ini ?!', function (e) {
+                swal("Berhasil", "@TempData["Pesan"]", "success");
+                if (e) {
+                 
+                    window.location.href = '@Url.Action("Delete","KatBarang")/' + Id;
+                   
+
+                }
+                else {
+                     alertify.error("You've clicked Cancel");
+                }
+            }, null);
+
+        }
+</script>

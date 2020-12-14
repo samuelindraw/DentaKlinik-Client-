@@ -1,0 +1,225 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.AuthenticateModel
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en" class="no-focus">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <title>Dental Clinic </title>
+
+    <meta name="description" content="Dental Clinic">
+    <meta name="author" content="pixelcave">
+    <meta name="robots" content="noindex, nofollow">
+    <meta property="og:title" content="Dental clinic - reset password">
+    <meta property="og:site_name" content="dentai clinic">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <link rel="shortcut icon" href="~/assets/media/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/assets/media/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/assets/media/favicons/apple-touch-icon-180x180.png">
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="~/assets/media/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/assets/media/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/assets/media/favicons/apple-touch-icon-180x180.png">
+    <!-- END Icons -->
+    <!-- Stylesheets -->
+    <!-- Fonts and Codebase framework -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
+    <link href="~/assets/js/plugins/sweetalert2/sweetalert2.css" rel="stylesheet" />
+    <link rel="stylesheet" id="css-main" href="~/assets/css/codebase.min.css">
+
+    <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
+    <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
+    <!-- END Stylesheets -->
+
+</head>
+
+<body>
+    @if (TempData["error"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Kesalahan !!", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (TempData["success"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+        </script>
+    }
+    <div id="page-container" class="main-content-boxed">
+        <!-- Main Container -->
+        <main id="main-container">
+            <!-- Page Content -->
+            <div class="bg-body-dark bg-pattern" style="background-image: url('~/assets/media/various/bg-pattern-inverse.png');">
+                <div class="row mx-0 justify-content-center">
+                    <div class="hero-static col-lg-6 col-xl-4">
+                        <div class="content content-full overflow-hidden">
+                            <!-- Header -->
+                            <div class="py-30 text-center">
+                                <a class="link-effect font-w700" href="index.html">
+                                    <i class="si si-fire"></i>
+                                    <span class="font-size-xl text-primary-dark">Cloud</span><span class="font-size-xl">Dentist</span>
+                                </a>
+                                <h1 class="h4 font-w700 mt-30 mb-10">Welcome Cloudentist - Dental Clinic System</h1>
+                                <h2 class="h5 font-w400 text-muted mb-0">It’s a great day today!</h2>
+                            </div>
+                            <!-- END Header -->
+                            <!-- Sign In Form -->
+                            <!-- jQuery Validation functionality is initialized with .js-validation-signin class in js/pages/op_auth_signin.min.js which was auto compiled from _es6/pages/op_auth_signin.js -->
+                            <!-- For more examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                            <form class="js-validation-signin" action="be_pages_auth_all.html" method="post">
+                                <div class="block block-themed block-rounded block-shadow">
+                                    <div class="block-header bg-gd-dusk">
+                                        <h3 class="block-title">Please Sign In</h3>
+                                        <div class="block-options">
+                                            <button type="button" class="btn-block-option">
+                                                <i class="si si-wrench"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="block-content">
+                                        <div class="form-group row">
+                                            <div class="col-12">
+                                                <label for="login-username">Username</label>
+                                                <input asp-for="Username" type="text" id="Username" class="form-control">
+                                                <span asp-validation-for="Username" class="text-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-12">
+                                                <label for="login-password">Password</label>
+                                                <input asp-for="Password" type="password" id="Password" class="form-control">
+                                                <span asp-validation-for="Password" class="text-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-12">
+                                                <label asp-for="TenantID">Tenant</label>
+                                                <select class="form-control" id="tenantID" name="tenantID">
+                                                    <option>Select Tenant</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-0">
+                                            <div class="col-sm-6 d-sm-flex align-items-center push">
+                                                <div class="custom-control custom-checkbox mr-auto ml-0 mb-0">
+                                                    <input type="checkbox" class="custom-control-input" id="login-remember-me" name="login-remember-me">
+                                                    <label class="custom-control-label" for="login-remember-me">Remember Me</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 text-sm-right push">
+                                                <button type="submit" id="submit" asp-action="Login" class="btn btn-block btn-hero btn-noborder btn-rounded btn-alt-primary">
+                                                    <i class="si si-login mr-10" input type="submit"></i> Sign In
+
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="block-content bg-body-light">
+                                        <div class="form-group text-center">
+                                            <button type="submit" id="submit" asp-controller="User" asp-action="ForgetPassword" class="btn btn-block btn-hero btn-noborder btn-rounded btn-alt-primary">
+                                                <i class="fa fa-warning mr-5"></i> Lupam Password
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- END Sign In Form -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END Page Content -->
+        </main>
+        <!-- END Main Container -->
+    </div>
+
+    <script src="~/assets/js/codebase.core.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var options = {};
+            var obj = {};
+            obj.token = ('@Context.Session.GetString("JWTtoken")');
+            options.data = JSON.stringify(obj);
+            sessionStorage.setItem("token", obj.token);
+            //bikin var role, obj.role, session set, get item
+            options.url = "http://localhost:30512/api/Tenant/" + sessionStorage.getItem("token");
+            options.type = "GET";
+            options.beforeSend = function (request) {
+            request.setRequestHeader("Authorization",
+            "Bearer " + sessionStorage.getItem("token"));
+            };
+                options.dataType = "json";
+                options.success = function (data) {
+                    data.forEach(function (element) {
+                        $("#tenantID").append("<option value='" + element.tenantID + "'>" + element.tenantName + "</option>");
+                    });
+                };
+                options.error = function () {
+                    $("#msg").html("Error while calling the Web API!");
+
+            };
+
+                $.ajax(options);
+            });
+    </script>
+    <!--
+        Codebase JS
+
+        Custom functionality including Blocks/Layout API as well as other vital and optional helpers
+        webpack is putting everything together at assets/_es6/main/app.js
+    -->
+    @*<script>
+
+            $('#submit').click(function (e) {
+                $("#message").html("Logging in...");
+                var data = {
+                    "Username": $("#Username").val(),
+                    "Password": $("#Password").val(),
+                };
+                $.ajax({
+                    url: "/Login/Login",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (status) {
+                        if (status.Success) {
+                            sweetAlert('Success', 'This is a success message', 'success');
+                        }
+                        else {
+                            sweetAlert('ERROR', 'This is a success message', 'success');
+                        }
+                    }
+                });
+            });
+
+        </script>*@
+    <script src="~/assets/js/codebase.app.min.js"></script>
+    <script src="~/assets/js/core/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/js/core/jquery.min.js"></script>
+    <!-- Page JS Plugins -->
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/site.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+    <!-- Page JS Code -->
+    <script src="~/assets/js/pages/op_auth_signin.min.js"></script>
+
+</body>
+</html>

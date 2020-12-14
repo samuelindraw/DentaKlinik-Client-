@@ -1,0 +1,58 @@
+﻿@model CloudDentist.Models.UserRole
+@{
+    ViewData["Title"] = "TambaheditData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Page Content -->
+    <div class="content">
+        <nav class="breadcrumb bg-white push">
+            <a class="breadcrumb-item" href="javascript:void(0)">Role</a>
+            <span class="breadcrumb-item active">Add new Data</span>
+        </nav>
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">Role Manager <small></small></h3>
+            </div>
+            <div class="block-content">
+                <!-- Bootstrap Lock -->
+                <div class="block block-themed">
+                    <div class="block-header bg-pulse">
+                        <h3 class="block-title">Role Manager</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                <i class="si si-refresh"></i>
+                            </button>
+                            <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full text-center bg-pulse-lighter">
+                        <img class="img-avatar img-avatar96 img-avatar-thumb" src="~/assets/media/avatars/avatar1.jpg" alt="">
+                    </div>
+                    <div class="block-content">
+                        <form asp-action="CreatePost" method="post">
+                            @Html.HiddenFor(model => model.roleID)
+                            <div class="form-group row">
+                                <label class="col-12" for="lock1-password">RoleName</label>
+                                <div class="col-12">
+                                    <input asp-for="RoleName" class="form-control" />
+                                    <span asp-validation-for="RoleName" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <input type="submit" value="Submit" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- END Bootstrap Lock -->
+            </div>
+        </div>
+    </div>
+</main>
+<!-- END Page Content -->

@@ -1,0 +1,147 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.UserModel
+@{
+    ViewData["Title"] = "RegistrasiDokter";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (TempData["alert"] != null)
+{
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script>
+        swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+    </script>
+}
+@if (TempData["success"] != null)
+{
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script>
+        swal("Berhasil", "@TempData["Pesan"]", "success");
+    </script>
+}
+@if (TempData["error"] != null)
+{
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script>
+          swal("ERROR", "@TempData["Pesan"]", "error");
+    </script>
+}
+<h5>Pengaturan Data Dokter @Context.Session.GetString("Tenant")</h5>
+<p>Fasilitas ini digunakan untuk menambahkan data Dokter baru ke dalam sistem</p>
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Horizontal Form</h3>
+        <div class="block-options">
+            <button type="button" class="btn-block-option">
+                <i class="si si-wrench"></i>
+            </button>
+        </div>
+    </div>
+    <div class="block-content">
+        <form asp-action="CreatePost" method="post">
+            <div class="form-group row">
+                <label asp-for="Username" class="col-lg-3 col-form-label">Username</label>
+                <div class="col-lg-7">
+                    <input asp-for="Username" type="text" class="form-control" placeholder="Masukan Username..">
+                    <span asp-validation-for="Username" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Nama" class="col-lg-3 col-form-label">Nama</label>
+                <div class="col-lg-7">
+                    <input asp-for="Nama" type="text" class="form-control" placeholder="Masukan Nama..">
+                    <span asp-validation-for="Nama" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Umur" class="col-lg-3 col-form-label">Umur</label>
+                <div class="col-lg-7">
+                    <input asp-for="Umur" type="number" class="form-control" placeholder="Masukan Umur..">
+                    <span asp-validation-for="Umur" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Email" class="col-lg-3 col-form-label">Email</label>
+                <div class="col-lg-7">
+                    <input asp-for="Email" type="email" class="form-control" placeholder="Masukan Email..">
+                    <span asp-validation-for="Email" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Password" class="col-lg-3 col-form-label">Password</label>
+                <div class="col-lg-7">
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Masukan Password..">
+                    <span asp-validation-for="Password" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="ConfirmPassword" class="col-lg-3 col-form-label">ConfirmPassword</label>
+                <div class="col-lg-7">
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Re-Password..">
+                    <span asp-validation-for="ConfirmPassword" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="rolename" class="col-lg-3 col-form-label">rolename</label>
+                <div class="col-lg-7">
+                    <input asp-for="rolename" type="text" value="Dokter" class="form-control" placeholder="Dokter" readonly>
+                    <span asp-validation-for="rolename" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Kota" class="col-lg-3 col-form-label">Kota</label>
+                <div class="col-lg-7">
+                    <input asp-for="Kota" type="text" class="form-control" placeholder="Masukan Kota..">
+                    <span asp-validation-for="Kota" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="NoHp" class="col-lg-3 col-form-label">NoHp</label>
+                <div class="col-lg-7">
+                    <input asp-for="NoHp" type="number" class="form-control" placeholder="Masukan NoHp..">
+                    <span asp-validation-for="NoHp" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="NoTelpon" class="col-lg-3 col-form-label">NoTelpon</label>
+                <div class="col-lg-7">
+                    <input asp-for="NoTelpon" type="number" class="form-control" placeholder="Masukan NoHp..">
+                    <span asp-validation-for="NoTelpon" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Prosentase" class="col-lg-3 col-form-label">Prosentase</label>
+                <div class="col-lg-7">
+                    <input asp-for="Prosentase" type="number" class="form-control" placeholder="Masukan Prosentase..">
+                    <span asp-validation-for="Prosentase" class="text-danger" />
+                </div>
+            </div>
+            <div class="col-sm-6 text-sm-right push">
+                <button type="submit" id="submit" class="btn btn-alt-success">
+                    <i class="fa fa-plus mr-10"></i> Create Account
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="~/assets/js/codebase.core.min.js"></script>
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script src="~/assets/js/core/bootstrap.bundle.min.js"></script>
+<!--
+    Codebase JS
+
+    Custom functionality including Blocks/Layout API as well as other vital and optional helpers
+    webpack is putting everything together at assets/_es6/main/app.js
+-->
+<script src="~/assets/js/codebase.app.min.js"></script>
+
+<!-- Page JS Plugins -->
+<script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<!--unobtrusive js make we can validate from asp validation -->
+<script src="~/assets/jquery.validate.unobtrusive.js"></script>
+<!-- Page JS Code -->
+<script src="~/assets/js/pages/op_auth_signup.min.js"></script>
+<!-- JANGAN LUPA MASUKAN TOKEN KE API AMBIL DARI SESSION STRING -->
+<script src="~/assets/js/core/jquery.min.js"></script>

@@ -1,0 +1,154 @@
+﻿@model IEnumerable<CloudDentist.Models.Pengguna>
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "listDataPasien";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h5>Pengaturan Data Pasien @Context.Session.GetString("Tenant")</h5>
+<p>Fasilitas ini digunakan untuk menambahkan data pasien baru ke dalam sistem</p>
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Tabel Pasien</h3>
+        <a href="@Url.Action("RegisterPasien","User")" class="btn btn-primary bottom-buffer" style="float:right;"><i class="fa fa-plus"></i> Pasien</a>
+    </div>
+    @if (TempData["alert"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (TempData["success"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (Context.Session.GetString("Userrole") == "Dokter" || Context.Session.GetString("Userrole") == "Perawat" )
+    {
+        <div class="block-content block-content-full">
+            <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Pasien</th>
+                        <th>Gender</th>
+                        <th>Alamat</th>
+                        <th>Kota</th>
+                        <th>NoHP</th>
+                        <th>Notelp</th>
+                        <th>Umur</th>
+                        <th>Pilih</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+
+                    {
+                        <tr>
+                            <td class="font-w600">@item.IdPasien</td>
+                            <td class="font-w600">@item.Nama</td>
+                            <td class="font-w600">@item.Gender</td>
+                            <td class="font-w600">@item.Alamat</td>
+                            <td class="font-w600">@item.Kota</td>
+                            <td class="font-w600">@item.NoTelpon</td>
+                            <td class="font-w600">@item.NoHP</td>
+                            <td class="font-w600">@item.Umur</td>
+                            @*<td class="d-none d-sm-table-cell">@string.Join(",", item.Barang.ToList().Select(x => x.NamaBarang))</td>
+                                <td class="d-none d-sm-table-cell"><a>@string.Join(",", item.Barang.ToList().Select(x => x.Stok))</a></td>*@
+                            <td class="d-none d-sm-table-cell">
+                                <a href="@Url.Action("EditDataPasien", "Pengguna", new { IdPasien = @item.IdPasien })" class="btn btn-alt-primary"><i class="fa fa-pencil text-primary mr-5">Detail</i></a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="block-content block-content-full">
+            <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Pasien</th>
+                        <th>Gender</th>
+                        <th>Alamat</th>
+                        <th>Kota</th>
+                        <th>Umur</th>
+                        <th>Pilih</th>
+                        <th>Status</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+
+                    {
+                    <tr>
+                        <td class="font-w600">@item.IdPasien</td>
+                        <td class="font-w600">@item.Nama</td>
+                        <td class="font-w600">@item.Gender</td>
+                        <td class="font-w600">@item.Alamat</td>
+                        <td class="font-w600">@item.Kota</td>
+                        <td class="font-w600">@item.Umur</td>
+                        @*<td class="d-none d-sm-table-cell">@string.Join(",", item.Barang.ToList().Select(x => x.NamaBarang))</td>
+        <td class="d-none d-sm-table-cell"><a>@string.Join(",", item.Barang.ToList().Select(x => x.Stok))</a></td>*@
+                        <td class="d-none d-sm-table-cell">
+                            <a href="@Url.Action("EditDataPasien", "Pengguna", new { IdPasien = @item.IdPasien })" class="btn btn-alt-primary"><i class="fa fa-pencil text-primary mr-5">Detail</i></a>
+                        </td>
+                        @if (@item.IsEnabled == true)
+                        {
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-secondary m-5 btn-alt-danger" href="@Url.Action("Enabled", "User", new {Username = item.Username})">
+                                    <i class="fa fa-toggle-off text-danger"></i>&nbsp; Disable
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-secondary m-5 btn-alt-primary" href="@Url.Action("Enabled", "User", new {Username = item.Username })">
+                                    <i class="fa fa-toggle-on text-body-bg-dark"></i>&nbsp; Enable
+                                </a>
+                            </td>
+                        }
+                        @if (@item.Status == true)
+                        {
+                            <td class="d-none d-sm-table-cell">Aktif</td>
+                        }
+                        else
+                        {
+                            <td class="d-none d-sm-table-cell">Tidak Aktif</td>
+                        }
+                    </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+    }
+
+</div>
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}   
+

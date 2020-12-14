@@ -1,0 +1,240 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.Transaksi
+@{
+    ViewData["Title"] = "detailTransaksi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Page Content -->
+    <div class="content">
+        <h2 class="content-heading">Rekam Medis</h2>
+        <p>Fasilitas ini digunakan untuk Melihat Rekaman Medis Pasien</p>
+        <div class="block">
+            <div class="block-header block-header-default " id="tabbarang">
+                <h3 class="block-title"><strong>Rekam Medis </strong></h3>   
+                <a href="@Url.Action("CetakInvoice", "Transaksi", new { idtransaksi = @Model.IdTransaksi, tenantID = Model.TenantID })" class="btn btn-alt-primary"> <i class="fa fa-print text-danger mr-5"></i> Cetak Invoice</a>
+            </div>
+            <!-- Dummy content -->
+            <div class="block">
+                <div class="block-content">
+                    <form asp-action="TambahEditDataTindakan" asp-controller="Tindakan" method="post" id="form-add">
+                        @Html.HiddenFor(model => model.IdTransaksi)
+                        <div class="form-group row" hidden>
+                            <label class="col-lg-2 col-form-label">TenantID</label>
+                            <span> <input asp-for="TenantID" value="@Context.Session.GetString("TenantID")" class="form-control" readonly /></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="IdTransaksi" class="col-lg-2 col-form-label">No Transaksi</label>
+                            <span> <input asp-for="IdTransaksi" class="form-control" readonly /></span>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Tanggal</label>
+                            <span> <input asp-for="Tanggal" id="tanggal" type="date" class="form-control" readonly /></span>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">ID Pasien</label>
+                            <span> <input asp-for="IdPasien" id="idpasien" class="form-control" readonly /></span>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Dokter </label>
+                            <span> <input asp-for="Username" id="Username" class="form-control" readonly /></span>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Anamnesis </label>
+                            <span> <input asp-for="Anamnesis" id="Anamnesis" class="form-control" readonly /></span>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-12">
+                                <label>resep</label>
+                                <textarea asp-for="Resep" id="resep" class="form-control form-control-lg" rows="2" cols="5" readonly></textarea>
+                            </div>
+                        </div>
+                        <br>
+                    </form>
+                </div>
+            </div>
+            </div>
+            <div class="block">
+                <div class="block-header block-header-default " id="tabbarang">
+                    <h3 class="block-title"><strong>Daftar Rekam Tindakan Tanggal</strong>&nbsp;<small>( @Convert.ToString(string.Format("{0:dd/MM/yyyy}", @Model.Tanggal)) )</small></h3>
+                </div>
+
+                <div class="block-content" id="penjualan">
+                    <br />
+                    <h3 class="block-title"><strong>Anamnesis :</strong></h3>
+                    <div class="form-group row">
+                        @if (@Model.Anamnesis != null)
+                        {
+                            <label class="col-lg-8 col-form-label">@Model.Anamnesis </label>
+                        }
+                        else
+                        {
+                            <label class="col-lg-4 col-form-label">Tidak di lakukan pencatatan untuk tenant ini </label>
+                        }
+                    </div>
+                    <h3 class="h4 font-w700 border-black-op-t border-10x"> </h3>
+                    <h3 class="block-title"><strong>List Tindakan Medis :</strong></h3>
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <table id="tabeltindakan" class="table table-bordered table-striped js-dataTable-full-pagination ">
+                                <thead>
+                                    <tr>
+                                        <th>Posisi</th>
+                                        <th>Jenis Tindakan</th>
+                                        <th>Diagnosis</th>
+                                        <th>Biaya</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Tindakan)
+
+                                    {
+                                        <tr>
+                                            <td>Kuadran( @Model.posisigigi )</td>
+                                            <td>@item.JenisTindakan.Jenis</td>
+                                            <td>@item.Diagnosis</td>
+                                            <td>@item.biaya</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <div class="block-header block-header-default " id="tabbarang">
+                    <h3 class="block-title"><strong>Daftar Rekam Penjualan Tanggal</strong>&nbsp;<small>( @Convert.ToString(string.Format("{0:dd/MM/yyyy}", @Model.Tanggal)) )</small></h3>
+                </div>
+                <div class="block-content" id="penjualan">
+                    <br />
+                    <h3 class="block-title"><strong>Resep :</strong></h3>
+                    <div class="form-group row">
+                        @if (@Model.Resep != null)
+                        {
+                            <label class="col-lg-8 col-form-label">@Model.Resep </label>
+                        }
+                        else
+                        {
+                            <label class="col-lg-4 col-form-label">Tidak di lakukan pencatatan untuk tenant ini </label>
+                        }
+                    </div>
+                    <h3 class="h4 font-w700 border-black-op-t border-10x"> </h3>
+                    <h3 class="block-title"><strong>Pemberian Obat Jadi :</strong></h3>
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+
+                            <table id="tabeljual" class="table table-bordered table-striped js-dataTable-full-pagination ">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Barang</th>
+                                        <th>Qty</th>
+                                        <th>Harga Satuan</th>
+                                        <th>Tatal Harga</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Jual)
+                                    {
+                                        <tr>
+                                            <td>@item.Barang.NamaBarang</td>
+                                            <td>@item.Qty</td>
+                                            <td>@item.Barang.Harga</td>
+                                            <td>@item.Harga</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+</main>
+
+<script src="~/assets/js/core/jquery.min.js"></script>
+@*<script src="~/assets/js/codebase.core.min.js"></script>*@
+<script src="~/assets/js/codebase.app.min.js"></script>
+<script src="~/assets/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+<script>
+
+        var token = '@Context.Session.GetString("JWTtoken")';
+
+        var gigi = document.forms["Tindakan"];
+        var array = [];
+        $(document).ready(function () {
+            //for (var i = 0; i < gigi.length; i++) {
+            //    array[i] = {kuadran : "", nomerGigi : ""}
+            //}
+        });
+</script>
+
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+}
+<script type="text/javascript">
+    
+    $(document).ready(function () {
+        $("#btnedit").attr("hidden", false);
+        $("#JenisTindakan").attr("hidden", true);
+    });
+     var token = '@Context.Session.GetString("JWTtoken")';
+     function ShowAllReservation() {
+              $("table").attr("list_Tindakan_Transaksi");
+                $.ajax({
+                     url: "http://localhost:30512/api/Tindakan/sorttransaksi/" + @Model.IdTransaksi,
+                    method: "get",
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    success: function (result, status, xhr) {
+                        $.each(result, function (index, value) {
+                            $("tbody").append($("<tr>"));
+                            appendElement = $("tbody tr").last();
+                            panelInfo = [];
+
+                            $.each (value.gigiRawat, function(index, courses)
+                            {
+                                panelInfo.push( courses.kuadran + ":" + courses.gigiPosisi )
+                                //var arrString = panelInfo.join(", ");
+                            })
+                            var arrstring = JSON.parse(JSON.stringify(panelInfo));
+                          var string = $.map(arrstring, function(obj){
+                                return obj.kuadran
+                          }).join(' ');
+
+                            var kuadran = $.map(arrstring, function(obj){return JSON.stringify(obj)}).join(' , ')
+                            //panelInfo.toString();
+                            //var test = arrstring.join(" , ");
+                            //console.log(test3);
+
+
+                            appendElement.append($("<td>").html("Kuadran  (" + kuadran +" )"));
+                            appendElement.append($("<td>").html(value.jenisTindakan["jenis"]));
+                            appendElement.append($("<td>").html(value["tenantID"]));
+                            appendElement.append($("<td>").html(value["biaya"]));
+                            appendElement.append($("<td>").html("<a href=\"/Tindakan/TambahEditDataTindakan?Id=" + value["idTindakan"]+"&tenantID=" + value["tenantID"] + "\">Edit</a>"));
+                            appendElement.append($("<td>").html("<a href=\"/Tindakan/TambahEditDataTindakan?Id=" + value["id"] + "\">Delete</a>"));
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr)
+                    }
+                });
+            }
+</script>
+

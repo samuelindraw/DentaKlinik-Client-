@@ -1,0 +1,128 @@
+﻿@model IEnumerable<CloudDentist.Models.Pengguna>
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "AdminListDataUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+        function Delete(Username) {
+            alertify.confirm('Data Kategori','Apakah anda yakin untuk menghapus data ini ?!', function (e) {
+                if (e) {
+                     window.location.href = '@Url.Action("Delete","user")/' + Username;
+                }
+                else {
+                     alertify.error("You've clicked Cancel");
+                }
+            }, null);
+
+        }
+
+</script>
+<!-- Dynamic Table Full Pagination -->
+<h5>Pengaturan Data User @Context.Session.GetString("Tenant")</h5>
+<p>Fasilitas ini digunakan untuk menambahkan data Dokter/Perawt baru ke dalam sistem</p>
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Data User   @Context.Session.GetString("Tenant")</h3>
+        @if (Context.Session.GetString("userlistrole") == "Dokter")
+        {
+            <a href="@Url.Action("RegistrasiDokter","User")" class="btn btn-primary bottom-buffer" id="btn-add-user" style="float:right;"><i class="fa fa-plus"></i> Tambah Dokter</a>
+        }
+        else
+        {
+            <a href="@Url.Action("RegistrasiPerawat","User")" class="btn btn-primary bottom-buffer" id="btn-add-user" style="float:right;"><i class="fa fa-plus"></i> Tambah Perawat</a>
+        }
+    </div>
+    @if (TempData["alert"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (TempData["success"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+        </script>
+    }
+
+    <div class="block-content block-content-full">
+        <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+        <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Nama</th>
+                    <th>Gender</th>
+                    <th class="d-none d-sm-table-cell">kota</th>
+                    <th class="d-none d-sm-table-cell">Status</th>
+                    <th class="d-none d-sm-table-cell">Status</th>
+                    <th class="d-none d-sm-table-cell" style="width: 15%;">Manage Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td class="font-w600">@item.Username</td>
+                    <td class="d-none d-sm-table-cell">@item.Nama</td>
+                    <td class="d-none d-sm-table-cell">@item.Gender</td>
+                    <td class="d-none d-sm-table-cell">@item.Kota</td>
+                    @if (@item.IsEnabled == true)
+                    {
+                        <td class="text-center">
+                            <a class="btn btn-sm btn-secondary m-5 btn-alt-danger" href="@Url.Action("Enabled", "User", new {Username = item.Username})">
+                                <i class="fa fa-toggle-off text-danger"></i>&nbsp; Disable
+                            </a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-center">
+                            <a class="btn btn-sm btn-secondary m-5 btn-alt-primary" href="@Url.Action("Enabled", "User", new {Username = item.Username })">
+                                <i class="fa fa-toggle-on text-body-bg-dark"></i>&nbsp; Enable
+                            </a>
+                        </td>
+                    }
+                    @if (@item.Status == true)
+                    {
+                        <td class="d-none d-sm-table-cell">Aktif</td>
+                    }
+                    else
+                    {
+                        <td class="d-none d-sm-table-cell">Tidak Aktif</td>
+                    }
+
+                    <td class="text-center">
+                        <a class="btn btn-rounded btn-alt-secondary" href="@Url.Action("EditDataUser", "Pengguna", new { Username = item.Username })">
+                            <i class="fa fa-user-circle mr-5"></i>Profile
+                        </a>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+</div>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- END Dynamic Table Full Pagination -->
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}
+

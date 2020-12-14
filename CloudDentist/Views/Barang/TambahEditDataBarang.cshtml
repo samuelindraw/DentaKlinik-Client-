@@ -1,0 +1,122 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.Barang
+@{
+    ViewData["Title"] = "TambahEditDataBarang";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Bootstrap Forms Validation -->
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Tambah Data Barang</h3>
+        <div class="block-options">
+            <button type="button" class="btn-block-option">
+                <i class="si si-wrench"></i>
+            </button>
+        </div>
+    </div>
+    <div class="block-content">
+        <div class="row justify-content-center py-20">
+            <div class="col-xl-6">
+                <!-- jQuery Validation functionality is initialized in js/pages/be_forms_validation.min.js which was auto compiled from _es6/pages/be_forms_validation.js -->
+                <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                <form asp-action="CreatePost" method="post">
+                    @Html.HiddenFor(model => model.IdBarang)
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="NamaBarang">Nama Barang :</label>
+                            <input asp-for="NamaBarang" class="form-control" />
+                            <span asp-validation-for="NamaBarang" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="IdKatBarang">Kategori Barang</label>
+                            <select class="form-control" id="IdKatBarang" name="IdKatBarang">
+                                @if (Model.IdKatBarang == 0)
+                                {
+                                    <option>Select Kategori</option>
+
+                                }
+                                else
+                                {
+                                    <selected>@Model.KatBarang.NamaKategori</selected>
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Harga">Harga Barang :</label>
+                            <input asp-for="Harga" class="form-control" />
+                            <span asp-validation-for="Harga" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Stok">Stok :</label>
+                            <input asp-for="Stok" class="form-control" />
+                            <span asp-validation-for="Stok" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Minstok">Minstok :</label>
+                            <input asp-for="Minstok" class="form-control" />
+                            <span asp-validation-for="Minstok" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Keterangan">Keterangan :</label>
+                            <input asp-for="Keterangan" class="form-control" />
+                            <span asp-validation-for="Keterangan" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8 ml-auto">
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            var options = {};
+            var obj = {};
+            obj.tenant =  ('@Context.Session.GetString("TenantID")');
+            obj.token = ('@Context.Session.GetString("JWTtoken")');
+            options.data = JSON.stringify(obj);
+            sessionStorage.setItem("token", obj.token);
+            sessionStorage.setItem("tenant", obj.tenant);
+            options.url = "http://localhost:30512/api/KatBarang/getkatbarangtenantid/" + sessionStorage.getItem("tenant");
+            options.type = "GET";
+            options.beforeSend = function (request) {
+            request.setRequestHeader("Authorization",
+            "Bearer " + sessionStorage.getItem("token"));
+            };
+                options.dataType = "json";
+                options.success = function (data) {
+                    data.forEach(function (element) {
+                        $("#IdKatBarang").append("<option value='" + element.idKategori + "'>" + element.namaKategori + "</option>");
+                    });
+                };
+                options.error = function () {
+                    $("#msg").html("Error while calling the Web API!");
+
+            };
+
+                $.ajax(options);
+            });
+</script>
+
+<!-- Bootstrap Forms Validation -->

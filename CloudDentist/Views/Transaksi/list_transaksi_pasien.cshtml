@@ -1,0 +1,131 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.Pengguna
+@{
+    ViewData["Title"] = "list_transaksi_pasien";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Page Content -->
+
+<div class="content">
+    <h2 class="content-heading">Anamnesis dan Diagnosis</h2>
+    <p>Fasilitas ini digunakan untuk mencatat data anamnesis dan diagnosis pasien tiap pemeriksaaan</p>
+    <!-- Horizontal Form -->
+    <div class="block">
+        <div class="block-header block-header-default">
+            <h3 class="block-title" style="color:green"> Form Rekam Medis</h3>
+            <a href="@Url.Action("Tambah_edit_Transaksi", "Transaksi", new { Username = Model.IdPasien, tenantID = Context.Session.GetString("TenantID") })" class="btn btn-primary bottom-buffer" id="btn-add-tenantpengguna" style="float:right;"><i class="fa fa-plus"></i> Anamnesis</a>
+        </div>
+        <div class="block-content">
+            <form asp-action="CreatePost" method="post">
+                @Html.HiddenFor(model => model.Username)
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label">ID Pasien</label>
+                    <div class="col-lg-7">
+                        <input asp-for="IdPasien" type="text" class="form-control" id="material-text" name="material-text" readonly />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label">Nama</label>
+                    <div class="col-lg-7">
+                        <input asp-for="Nama" type="text" class="form-control" id="material-text" name="material-text" readonly />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label">Gender</label>
+                    <div class="col-lg-7">
+                        <input asp-for="Gender" type="text" class="form-control" id="material-text" name="material-text" readonly />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label">Umur</label>
+                    <div class="col-lg-7">
+                        <input asp-for="Umur" type="text" class="form-control" id="material-text" name="material-text" readonly />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label">Alamat</label>
+                    <div class="col-lg-7">
+                        <input asp-for="Alamat" type="text" class="form-control" id="material-text" name="material-text" readonly />
+                    </div>
+                </div> <div class="form-group row">
+                    <label class="col-lg-3 col-form-label">Kota</label>
+                    <div class="col-lg-7">
+                        <input asp-for="Kota" type="text" class="form-control" id="material-text" name="material-text" readonly />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label">Riawayat Penyakit</label>
+                    <div class="col-lg-7">
+                        <input asp-for="DetailPasien.RwPenyakit" type="text" class="form-control" id="material-text" name="material-text" readonly />
+                    </div>
+                </div>
+                <br>
+            </form>
+        </div>
+    </div>
+
+    <!-- END Horizontal Form -->
+    <div class="block">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Daftar Rekam Medis<small></small></h3>
+        </div>
+        @if (TempData["alert"] != null)
+        {
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+            <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+            </script>
+        }
+        @if (TempData["success"] != null)
+        {
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+            <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+            </script>
+        }
+        @if (TempData["error"] != null)
+        {
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+            <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+            </script>
+        }
+        
+    <div class="block-content block-content-full">
+        <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+        <table class="table table-borderless table-hover table-striped table-vcenter mb-0 js-dataTable-full-pagination ">
+            <thead>
+                <tr>
+                    <th style="text-overflow:inherit">Tanggal</th>
+                    <th>Dokter </th>
+                    <th>Resep </th>
+                    <th>Nama Tenant</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.DetailPasien.Transaksi)
+                {
+                <tr>
+                    <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.Tanggal))</td>
+                    <td>
+                        <strong>@item.Username</strong>
+                    </td>
+                    <td>@item.Resep</td>
+                    <td>
+                        <span class="badge badge-success">@item.Tenant.TenantName</span>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("detailTransaksi", "Transaksi", new { idtransaksi = item.IdTransaksi, tenantID = item.TenantID })" class="btn btn-alt-primary"> <i class="fa fa-heartbeat text-danger mr-5"></i> Catatan Medis</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    </div>
+    </div>

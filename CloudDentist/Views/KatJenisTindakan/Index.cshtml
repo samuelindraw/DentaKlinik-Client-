@@ -1,0 +1,91 @@
+﻿@model IEnumerable<CloudDentist.Models.KatJenis>
+    @{
+        ViewData["Title"] = "Index";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    <script type="text/javascript">
+        function Delete(Id) {
+            alertify.confirm('Data Jenis Kategori Tindakan','Apakah anda yakin untuk menghapus data ini ?!', function (e) {
+                if (e) {
+                    window.location.href = '@Url.Action("Delete","KatJenisTindakan")/' + Id;
+                }
+                else {
+                     alertify.error("You've clicked Cancel");
+                }
+            }, null);
+
+        }
+
+    </script>
+    <!-- Dynamic Table Full Pagination -->
+    <div class="block">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Master Kategori Jenis Tindakan <small></small></h3>
+            <a href="@Url.Action("TambaheditDatakatjenis","KatJenisTindakan")" class="btn btn-primary bottom-buffer" id="btn-add" style="float:right;"><i class="fa fa-plus"></i> Kategori Jenis</a>
+        </div>
+        @if (TempData["alert"] != null)
+        {
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+            <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+            </script>
+        }
+        @if (TempData["success"] != null)
+        {
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+            <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+            </script>
+        }
+        @if (TempData["error"] != null)
+        {
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+            <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+            </script>
+        }
+        <div class="block-content block-content-full">
+            <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                <thead>
+                    <tr>
+                        <th>ID tenant</th>
+                        <th>ID kategori</th>
+                        <th>Nama Kategori</th>
+                        <th class="d-none d-sm-table-cell" style="width: 15%;">Nama Tenant</th>
+                        <th class="text-center" style="width: 15%;">EDIT</th>
+                        <th class="text-center" style="width: 15%;">DELETE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+
+                    {
+                        <tr>
+                            <td class="font-w600">@item.TenantID</td>
+                            <td class="font-w600">@item.IdKatJenis</td>
+                            <td class="font-w600">@item.KategoriName</td>
+                            <td class="d-none d-sm-table-cell">@item.Tenant.TenantName</td>
+                            @*<td class="d-none d-sm-table-cell">@string.Join(",", item.Barang.ToList().Select(x => x.NamaBarang))</td>
+                                <td class="d-none d-sm-table-cell"><a>@string.Join(",", item.Barang.ToList().Select(x => x.Stok))</a></td>*@
+                            <td class="d-none d-sm-table-cell">
+                                <a href="@Url.Action("TambahEditDataKatjenis", "KatJenis", new { id = item.IdKatJenis })" class="btn btn-alt-primary"><i class="fa fa-pencil text-primary mr-5">Edit</i></a>
+                            </td>
+                            <td class="text-center">
+                                <a onclick="Delete(@item.IdKatJenis)" class="btn btn-sm btn-secondary m-5"><i class="fa fa-times text-danger mr-5">Delete</i></a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    @section Scripts{
+        <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+    }

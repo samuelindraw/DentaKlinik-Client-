@@ -1,0 +1,112 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.DetailBeli
+@{
+    ViewData["Title"] = "TambahEditDataDetailBeli";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Bootstrap Forms Validation -->
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Tambah Pembelian Barang</h3>
+        <div class="block-options">
+            <button type="button" class="btn-block-option">
+                <i class="si si-wrench"></i>
+            </button>
+        </div>
+    </div>
+    <div class="block-content">
+        <div class="row justify-content-center py-20">
+            <div class="col-xl-6">
+                <!-- jQuery Validation functionality is initialized in js/pages/be_forms_validation.min.js which was auto compiled from _es6/pages/be_forms_validation.js -->
+                <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                <form asp-action="CreatePost" method="post">
+                    @Html.HiddenFor(model => model.DetailBeliId)
+                    <div class="form-group row">
+                        @if (Model.Tanggal != null)
+                        {
+                            <div class="col-12">
+                                <label asp-for="Tanggal">Tanggal :</label>
+                                <input asp-for="Tanggal" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" readonly />
+                                <span asp-validation-for="Tanggal" class="text-danger" />
+                            </div>
+                        }
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="IdBarang">Nama Barang</label>
+                            <select class="form-control form-control-lg" id="IdBarang" name="IdBarang">
+                                @if (Model.IdBarang == 0)
+                                {
+                                    <option>Select Barang</option>
+                                }
+                                else
+                                {
+                                    <option>@Model.Barang.NamaBarang</option>
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Qty">Qty :</label>
+                            <input asp-for="Qty" class="form-control" />
+                            <span asp-validation-for="Qty" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Harga">Harga :</label>
+                            <input asp-for="Harga"  class="form-control" />
+                            <span asp-validation-for="Harga" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8 ml-auto">
+                            <input type="submit" value="Submit" class="btn btn-primary float-right" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script type="text/javascript">
+                 $(document).ready(function () {
+            var options = {};
+            var obj = {};
+            var tenant = {};
+            obj.tenant = ('@Context.Session.GetString("TenantID")');
+            sessionStorage.setItem("tenant", obj.tenant);
+            obj.token = ('@Context.Session.GetString("JWTtoken")');
+            options.data = JSON.stringify(obj);
+            sessionStorage.setItem("token", obj.token);
+            options.url = "http://localhost:30512/api/Barang/sortbystok?="+sessionStorage.getItem("tenant");
+            options.type = "GET";
+            options.beforeSend = function (request) {
+            request.setRequestHeader("Authorization",
+            "Bearer " + sessionStorage.getItem("token"));
+            };
+                options.dataType = "json";
+                options.success = function (data) {
+                    data.forEach(function (element) {
+                        $("#IdBarang").append("<option value='" + element.idBarang + "'>" + element.namaBarang + "</option>");
+                    });
+                };
+                options.error = function () {
+                    $("#msg").html("Error while calling the Web API!");
+
+            };
+
+                $.ajax(options);
+            });
+</script>
+
+
+

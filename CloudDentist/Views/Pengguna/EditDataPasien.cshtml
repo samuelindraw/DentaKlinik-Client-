@@ -1,0 +1,292 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.Pengguna
+@{
+    ViewData["Title"] = "EditDataPasien";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Bootstrap Forms Validation -->
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">User Profile</h3>
+    </div>
+    @if (TempData["alert"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (TempData["success"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    <!-- Mega Form -->
+    <div class="block-content">
+        <form asp-action="CreatePost" method="post">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="form-group row">
+                        <div class="form-group row" hidden>
+                            <span> <input asp-for="Username" class="form-control" readonly /></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Nama">Nama  :</label>
+                            <input asp-for="Nama" class="form-control" />
+                            <span asp-validation-for="Nama" class="text-danger" />
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Username">Username</label>
+                            <input asp-for="Username" class="form-control form-control-lg" id="mega-lastname" name="mega-lastname" readonly>
+                            <span asp-validation-for="Username" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12">
+                        <label asp-for="rolename">Role  :</label>
+                        <input asp-for="rolename" class="form-control form-control-lg">
+                        <span asp-validation-for="rolename" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <label asp-for="NoHP">NoHP</label>
+                            <input asp-for="NoHP" class="form-control form-control-lg">
+                            <span asp-validation-for="NoHP" class="text-danger" />
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="NoTelpon">NoTelpon</label>
+                            <input asp-for="NoTelpon" class="form-control form-control-lg">
+                            <span asp-validation-for="NoTelpon" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Alamat">Alamat</label>
+                            <textarea asp-for="Alamat" class="form-control form-control-lg" rows="7" cols="40"></textarea>
+                            <span asp-validation-for="Alamat" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        @if (Model.IdPasien != null)
+                        {
+                            <div class="col-6">
+                                <label asp-for="IdPasien">Kode Pasien</label>
+                                <input asp-for="IdPasien" class="form-control form-control-lg" readonly>
+                                <span asp-validation-for="IdPasien" class="text-danger" />
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Email">Email  :</label>
+                            <input asp-for="Email" class="form-control form-control-lg" />
+                            <span asp-validation-for="Email" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Kota">Kota</label>
+                            <input asp-for="Kota" class="form-control form-control-lg">
+                            <span asp-validation-for="Kota" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <label asp-for="Umur">Umur</label>
+                            <input asp-for="Umur" class="form-control form-control-lg">
+                            <span asp-validation-for="Umur" class="text-danger" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-12">Gender</label>
+                        <div class="col-12">
+                            <label class="css-control css-control-primary css-radio mr-10">
+                                <input asp-for="Gender" type="radio" value="Female" id="Gender" name="Gender" />
+                                <span class="css-control-indicator"></span> Female
+                            </label>
+                            <label class="css-control css-control-primary css-radio">
+                                <input asp-for="Gender" type="radio" value="Male" id="Gender" name="Gender" />
+                                <span class="css-control-indicator"></span> Male
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" value="Submit" class="btn btn-alt-primary">
+                        <i class="fa fa-check mr-5"></i> Complete Profile
+                    </button>
+                    <a href="@Url.Action("TambahEditDetailPasien", "Detailpasien", new { IdPasien = Model.IdPasien, Username = Model.Username })" class="btn btn-alt-info" id="btn-add-detailpasien" @*style="/*float:right;*/"*@><i class="fa fa-info-circle"></i> Detail Pasien</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script type="text/javascript">
+        function Delete(Id) {
+            alertify.confirm('Data Kategori','Apakah anda yakin untuk menghapus data ini ?!', function (e) {
+                if (e) {
+                    window.location.href = '@Url.Action("Delete", "TenantPengguna")/' + TenantPenggunaID,Id;
+                }
+                else {
+                     alertify.error("You've clicked Cancel");
+                }
+            }, null);
+
+    }
+          $(".clickable").click(function(){
+           window.location = $(this).data("href");
+     });
+
+
+</script>
+<!-- END Mega Form -->
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}
+<script src="~/assets/js/core/jquery.min.js"></script>
+@if (@Context.Session.GetString("Userrole") == "Admin")
+{
+    <div class="block">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Data Tenant Pengguna<small></small></h3>
+
+            <a href="@Url.Action("TambaheditDataTenantPengguna", "TenantPengguna", new { Username = Model.Username })" class="btn btn-primary bottom-buffer" id="btn-add-tenantpengguna" style="float:right;"><i class="fa fa-plus"></i> Daftar Tenant Baru</a>
+
+        </div>
+        @if (TempData["alert"] != null)
+        {
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+            <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+            </script>
+        }
+        @if (TempData["success"] != null)
+        {
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+            <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+            </script>
+        }
+        @if (TempData["error"] != null)
+        {
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+            <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+            <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+            </script>
+        }
+        <div class="block-content block-content-full">
+            <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                <thead>
+                    <tr>
+                        <th>TenantPenggunaID</th>
+                        <th>Tenant ID</th>
+                        <th>Nama Tenant</th>
+                        <th>Username</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.TenantPengguna)
+
+                    {
+                        <tr>
+                            <td>@item.TenantID</td>
+                            <td>@item.Tenant.TenantName</td>
+                            <td>@item.Username</td>
+                            @if (@item.StatusTenant == true)
+                            {
+                                <td class="text-center">
+                                    <a class="btn btn-sm btn-secondary m-5 btn-alt-danger" href="@Url.Action("EnabledTenant", "TenantPengguna", new { Username = item.Username, tenantID = item.TenantID })">
+                                        <i class="fa fa-toggle-off text-danger"></i>&nbsp; Disable
+                                    </a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="text-center">
+                                    <a class="btn btn-sm btn-secondary m-5 btn-alt-primary" href="@Url.Action("EnabledTenant", "TenantPengguna", new { Username = item.Username, tenantID = item.TenantID })">
+                                        <i class="fa fa-toggle-on text-body-bg-dark"></i>&nbsp; Enable
+                                    </a>
+                                </td>
+                            }
+                            @if (@item.StatusTenant == true)
+                            {
+                                <td class="d-none d-sm-table-cell">Aktif</td>
+                            }
+                            else
+                            {
+                                <td class="d-none d-sm-table-cell">Tidak Aktif</td>
+                            }
+                            @*<td class="d-none d-sm-table-cell">@string.Join(",", item.Barang.ToList().Select(x => x.NamaBarang))</td>
+                    <td class="d-none d-sm-table-cell"><a>@string.Join(",", item.Barang.ToList().Select(x => x.Stok))</a></td>*@
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+<!-- END Mega Form -->
+
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            var options = {};
+            var obj = {};
+            obj.token = ('@Context.Session.GetString("JWTtoken")');
+            options.data = JSON.stringify(obj);
+            sessionStorage.setItem("token", obj.token);
+            options.url = "http://localhost:30512/api/UserRole";
+            options.type = "GET";
+            options.beforeSend = function (request) {
+            request.setRequestHeader("Authorization",
+            "Bearer " + sessionStorage.getItem("token"));
+            };
+                options.dataType = "json";
+                options.success = function (data) {
+                    data.forEach(function (element) {
+                        $("#rolename").append("<option>"
+                            + element.roleName + "</option>");
+                    });
+                };
+                options.error = function () {
+                    $("#msg").html("Error while calling the Web API!");
+
+            };
+
+                $.ajax(options);
+        });
+</script>
+

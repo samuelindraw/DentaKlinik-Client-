@@ -1,0 +1,142 @@
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<CloudDentist.Models.DetailPenggajian>
+@{
+    ViewData["Title"] = "DetailPenggajian";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Detail Pasien</h3>
+    </div>
+    @if (TempData["alert"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (TempData["success"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    <!-- Mega Form -->
+    <div class="block-content">
+        <form asp-action="CreatePost" method="post">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <label>Username  :</label>
+                            <input id="Username" class="form-control form-control-lg" readonly />
+                        </div>
+                        <div class="col-6">
+                            <label>Tanggal Gaji :</label>
+                            <input id="tanggal" type="date" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12">
+                        <label>Tanggal Awal :</label>
+                        <input id="tanggalawal" type="date" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script type="text/javascript">
+        function Delete(Id) {
+            alertify.confirm('Data Kategori','Apakah anda yakin untuk menghapus data ini ?!', function (e) {
+                if (e) {
+                    window.location.href = '@Url.Action("Delete", "TenantPengguna")/' + TenantPenggunaID,Id;
+                }
+                else {
+                     alertify.error("You've clicked Cancel");
+                }
+            }, null);
+
+    }
+          $(".clickable").click(function(){
+           window.location = $(this).data("href");
+     });
+
+
+</script>
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Data Penggajian<small></small></h3>
+    </div>
+    @if (TempData["alert"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (TempData["success"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    <div class="block-content block-content-full">
+        <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+        <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <thead>
+                <tr>
+                    <th>Id Penggajian</th>
+                    <th>Username</th>
+                    <th>Id Transaksi</th>
+                    <th>Anamnesis</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+
+                {
+                <tr>
+                    <td>@item.IdGaji</td>
+                    <td>@item.Transaksi.Username</td>
+                    <td>@item.Transaksi.Resep</td>
+                    <td>@item.Transaksi.Anamnesis</td>
+                    @*<td class="d-none d-sm-table-cell">@string.Join(",", item.Barang.ToList().Select(x => x.NamaBarang))</td>
+        <td class="d-none d-sm-table-cell"><a>@string.Join(",", item.Barang.ToList().Select(x => x.Stok))</a></td>*@
+                    <td class="d-none d-sm-table-cell"></td>
+                </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}

@@ -1,0 +1,217 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.Transaksi
+@{
+    ViewData["Title"] = "CetakInvoice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Page Content -->
+    <div class="content">
+        <!-- Invoice -->
+        <h2 class="content-heading d-print-none">
+        </h2>
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">#INV @Model.IdTransaksi</h3>
+                <div class="block-options">
+                    <!-- Print Page functionality is initialized in Helpers.print() -->
+                    <button type="button" class="btn-block-option" onclick="Codebase.helpers('print-page');">
+                        <i class="si si-printer"></i> Print Invoice
+                    </button>
+                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                        <i class="si si-refresh"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="block-content">
+                <!-- Invoice Info -->
+                <div class="row my-20">
+                    <!-- Company Info -->
+                    <div class="col-6">
+                        <p class="h5">@Model.Tenant.TenantName</p>
+                        <address>
+                            Dokter @Model.Username<br>
+                            @Model.Pengguna.Kota<br>
+                            @Model.Pengguna.Alamat<br>
+                            @Model.Pengguna.Email
+                        </address>
+                    </div>
+                    <!-- END Company Info -->
+                    <!-- Client Info -->
+                    <div class="col-6 text-right">
+                        <p class="h5">@Model.DetailPasien.Username</p>
+                        <address>
+                            @Model.DetailPasien.Pengguna.Kota<br>
+                            @Model.DetailPasien.Pengguna.Alamat<br>
+                            @Model.DetailPasien.Pengguna.Email
+                        </address>
+                    </div>
+                    <!-- END Client Info -->
+                </div>
+                <br />
+                <p class="text-muted text-center cm-strong ">@Model.Anamnesis</p>
+                <!-- END Invoice Info -->
+                <!-- Table -->
+                <div class="table-responsive push">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nama Barang</th>
+
+                                <th class="text-center" style="width: 90px;">Qty</th>
+                                <th class="text-right" style="width: 120px;">Satuan</th>
+                                <th class="text-right" style="width: 120px;">Sub Total</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model.Jual)
+                        {
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <p class="font-w600">@item.Barang.NamaBarang</p>
+                                        <div class="text-muted">@item.Barang.Keterangan</div>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span class="badge badge-pill badge-primary">@item.Qty</span>
+                                    </td>
+                                    <td class="text-right">@item.Barang.Harga</td>
+                                    <td class="text-right">@item.Harga</td>
+                                </tr>
+                            </tbody>
+                        }
+                        <tr>
+                            <td colspan="3" class="font-w600 text-right">Total Jual</td>
+                            <td class="text-right">@Model.TotalJual</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="table-responsive push">
+                        <table id="tabeltindakan" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Posisi</th>
+                                    <th>Diagnosis</th>
+                                    <th>Diagnosis</th>
+                                    <th>Biaya</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Tindakan)
+
+                                {
+                                    <tr>
+                                        <td>
+                                            <p class="font-w600 mb-2">Kuadran( @Model.posisigigi )</p>
+                                        </td>
+                                        <td class="text-left">
+                                            <span class="text-black">@item.JenisTindakan.Jenis</span>
+                                        </td>
+                                        <td class="text-left">
+                                            <span class="text-black">@item.Diagnosis</span>
+                                        </td>
+                                        <td class="text-right">@item.biaya</td>
+
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="3" class="font-w600 text-right">Total Tindakan</td>
+                                    <td class="text-right">@Model.TotalBayarTindakan</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                <!-- Footer -->
+                <p class="text-muted text-center">Terima kasih atas kunjunganya, dan terimakasih telah mempercayai @Model.Tenant.TenantName lekas sembuh !</p>
+                <!-- END Footer -->
+            </div>
+            </div>
+    </div>
+</main>
+
+<script src="~/assets/js/core/jquery.min.js"></script>
+@*<script src="~/assets/js/codebase.core.min.js"></script>*@
+<script src="~/assets/js/codebase.app.min.js"></script>
+<script src="~/assets/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+<script>
+
+        var token = '@Context.Session.GetString("JWTtoken")';
+
+        var gigi = document.forms["Tindakan"];
+        var array = [];
+        $(document).ready(function () {
+            //for (var i = 0; i < gigi.length; i++) {
+            //    array[i] = {kuadran : "", nomerGigi : ""}
+            //}
+        });
+</script>
+
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+}
+<script type="text/javascript">
+    
+    $(document).ready(function () {
+        $("#btnedit").attr("hidden", false);
+        $("#JenisTindakan").attr("hidden", true);
+    });
+     var token = '@Context.Session.GetString("JWTtoken")';
+     function ShowAllReservation() {
+              $("table").attr("list_Tindakan_Transaksi");
+                $.ajax({
+                     url: "http://localhost:30512/api/Tindakan/sorttransaksi/" + @Model.IdTransaksi,
+                    method: "get",
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    success: function (result, status, xhr) {
+                        $.each(result, function (index, value) {
+                            $("tbody").append($("<tr>"));
+                            appendElement = $("tbody tr").last();
+                            panelInfo = [];
+
+                            $.each (value.gigiRawat, function(index, courses)
+                            {
+                                panelInfo.push( courses.kuadran + ":" + courses.gigiPosisi )
+                                //var arrString = panelInfo.join(", ");
+                            })
+                            var arrstring = JSON.parse(JSON.stringify(panelInfo));
+                          var string = $.map(arrstring, function(obj){
+                                return obj.kuadran
+                          }).join(' ');
+
+                            var kuadran = $.map(arrstring, function(obj){return JSON.stringify(obj)}).join(' , ')
+                            //panelInfo.toString();
+                            //var test = arrstring.join(" , ");
+                            //console.log(test3);
+
+
+                            appendElement.append($("<td>").html("Kuadran  (" + kuadran +" )"));
+                            appendElement.append($("<td>").html(value.jenisTindakan["jenis"]));
+                            appendElement.append($("<td>").html(value["tenantID"]));
+                            appendElement.append($("<td>").html(value["biaya"]));
+                            appendElement.append($("<td>").html("<a href=\"/Tindakan/TambahEditDataTindakan?Id=" + value["idTindakan"]+"&tenantID=" + value["tenantID"] + "\">Edit</a>"));
+                            appendElement.append($("<td>").html("<a href=\"/Tindakan/TambahEditDataTindakan?Id=" + value["id"] + "\">Delete</a>"));
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr)
+                    }
+                });
+            }
+</script>

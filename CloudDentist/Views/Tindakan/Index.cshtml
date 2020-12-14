@@ -1,0 +1,712 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.Tindakan
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Page Content -->
+    <div class="content">
+        <h2 class="content-heading">Anamnesis dan Diagnosis</h2>
+        <p>Fasilitas ini digunakan untuk mencatat data anamnesis dan diagnosis pasien tiap pemeriksaaan</p>
+        <p>
+            <a id="ContentPlaceHolder1_linkRekamMedis" href="RekamMedis.aspx?idp=6409da76-6&amp;idx=15454" style="font-size:10pt;">Rekam Medis </a>
+            <a id="ContentPlaceHolder1_linkObat" href="/Transaksi/Tambah_edit_Transaksi?Id=@Model.IdTransaksi"> | Anamnesis </a>
+            <strong><span>| Diagnosis @*&amp;*@ </span></strong>
+            <a id="ContentPlaceHolder1_linkObat" href="Penjualan.aspx?idp=6409da76-6&amp;idx=15454"> | Pemberian Obat/Resep </a>
+            <a id="ContentPlaceHolder1_linkFinish" href="SelesaiTindak.aspx?idp=6409da76-6&amp;idx=15454"> | Selesai</a>
+            <a id="ContentPlaceHolder1_linkBatal" href="Batal.aspx?idx=15454"> | Batalkan Pemeriksaan</a>
+        </p>
+
+        <!-- Dummy content -->
+        <div class="block">
+            <div class="block-content">
+                <form asp-action="TambahEditDataTindakan" asp-controller="Tindakan" method="post" id="form-add">
+                    <div class="form-group row" hidden>
+                        <label class="col-lg-2 col-form-label">TenantID</label>
+                        <span> <input asp-for="TenantID" value="@Context.Session.GetString("TenantID")" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row" hidden>
+                        <span> <input asp-for="IdTransaksi" value="@Model.IdTransaksi" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">ID Pasien</label>
+                        <span> <input id="idpasien" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Tanggal</label>
+                        <span> <input id="tanggal" type="date" class="form-control" /></span>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label>Anamnesis</label>
+                            <textarea id="Anamnesis" class="form-control form-control-lg" rows="2" cols="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8">
+                            <button type="button" id="submitBtn" class="btn btn-primary min-width-125">Submit</button>
+                            <button type="button" id="btnedit" class="btn btn-primary min-width-125">Edit</button>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="col-md-12 py-5" style="margin-left:auto">
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x">Lokasi <span class="text">Gigi</span>.</h3>
+                    </div>
+                    <div>
+                        <input id="ContentPlaceHolder1_chkGigiARA" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigiARA" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigiARA\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigiARA">Pilih Semua Rahang Atas Gigi Susu</label>
+                    </div>
+                    <div>
+                        <input id="ContentPlaceHolder1_chkGigiDRA" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigiDRA" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigiDRA\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigiDRA">Pilih Semua Rahang Atas Gigi Dewasa</label>
+                    </div>
+                    <div id="ContentPlaceHolder1_UpRA">
+
+                    </div>
+                    <table>
+                        <tbody>
+
+                            <tr>
+                                @for (int i = 0; i < Model.GigiRawatK1.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatK1[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatK1[i].gigiPosisi)
+                                        @Html.CheckBoxFor(a => Model.GigiRawatK1[i].IsChecked)
+                                    </td>
+
+                                }
+                                <td>&nbsp;</td>
+                                @for (int i = 0; i < Model.GigiRawatK2.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatK2[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatK2[i].gigiPosisi)
+                                        @Html.CheckBoxFor(a => Model.GigiRawatK2[i].IsChecked)
+                                    </td>
+
+                                }
+                                <td></td>
+                            </tr>
+
+
+                            <tr>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi18" onclick="gigi18_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi17" onclick="gigi17_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi16" onclick="gigi16_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi15" onclick="gigi15_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi14" onclick="gigi14_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi13" onclick="gigi13_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi12" onclick="gigi12_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi11" onclick="gigi11_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi21" onclick="gigi21_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi22" onclick="gigi22_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi23" onclick="gigi23_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi24" onclick="gigi24_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi25" onclick="gigi25_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi26" onclick="gigi26_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi27" onclick="gigi27_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi28" onclick="gigi28_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi1e" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi1e" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi1e\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi1e">V</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi1d" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi1d" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi1d\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi1d">IV</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi1c" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi1c" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi1c\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi1c">III</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi1b" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi1b" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi1b\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi1b">II</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi1a" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi1a" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi1a\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi1a">I</label>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi2a" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi2a" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi2a\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi2a">I</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi2b" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi2b" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi2b\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi2b">II</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi2c" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi2c" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi2c\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi2c">III</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi2d" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi2d" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi2d\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi2d">IV</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi2e" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi2e" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi2e\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi2e">V</label>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi1e" onclick="gigi1e_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi1d" onclick="gigi1d_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi1c" onclick="gigi1c_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi1b" onclick="gigi1b_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi1a" onclick="gigi1a_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi2a" onclick="gigi2a_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi2b" onclick="gigi2b_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi2c" onclick="gigi2c_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi2d" onclick="gigi2d_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi2e" onclick="gigi2e_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi4e" onclick="gigi4e_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi4d" onclick="gigi4d_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi4c" onclick="gigi4c_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi4b" onclick="gigi4b_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi4a" onclick="gigi4a_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi3a" onclick="gigi3a_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi3b" onclick="gigi3b_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi3c" onclick="gigi3c_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi3d" onclick="gigi3d_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi3e" onclick="gigi3e_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td></td>
+                            </tr>
+
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi4e" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi4e" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi4e\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi4e">V</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi4d" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi4d" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi4d\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi4d">IV</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi4c" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi4c" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi4c\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi4c">III</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi4b" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi4b" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi4b\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi4b">II</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi4a" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi4a" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi4a\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi4a">I</label>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi3a" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi3a" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi3a\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi3a">I</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi3b" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi3b" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi3b\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi3b">II</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi3c" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi3c" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi3c\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi3c">III</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi3d" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi3d" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi3d\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi3d">IV</label>
+                                </td>
+                                <td>
+                                    <input id="ContentPlaceHolder1_chkGigi3e" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigi3e" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigi3e\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigi3e">V</label>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi48" onclick="gigi48_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi47" onclick="gigi47_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi46" onclick="gigi46_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi45" onclick="gigi45_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi44" onclick="gigi44_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi43" onclick="gigi43_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi42" onclick="gigi42_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi41" onclick="gigi41_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi31" onclick="gigi31_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi32" onclick="gigi32_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi33" onclick="gigi33_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi34" onclick="gigi34_Click1" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi35" onclick="gigi35_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi36" onclick="gigi36_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi37" onclick="gigi37_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi38" onclick="gigi38_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                            </tr>
+                            <tr>
+                                @for (int i = 0; i < Model.GigiRawatK4.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatK4[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatK4[i].gigiPosisi)
+                                        @Html.CheckBoxFor(a => Model.GigiRawatK4[i].IsChecked)
+                                    </td>
+
+                                }
+                                <td>&nbsp;</td>
+                                @for (int i = 0; i < Model.GigiRawatK3.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatK3[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatK3[i].gigiPosisi)
+                                        @Html.CheckBoxFor(a => Model.GigiRawatK3[i].IsChecked)
+                                    </td>
+
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <input id="ContentPlaceHolder1_chkGigiARB" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigiARB" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigiARB\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigiARB">Pilih Semua Rahang Bawah Gigi Susu</label>
+                    </div>
+                    <div>
+                        <input id="ContentPlaceHolder1_chkGigiDRB" type="checkbox" name="ctl00$ContentPlaceHolder1$chkGigiDRB" onclick="javascript:setTimeout('__doPostBack(\'ctl00$ContentPlaceHolder1$chkGigiDRB\',\'\')', 0)"><label for="ContentPlaceHolder1_chkGigiDRB">Pilih Semua Rahang Bawah Gigi Dewasa</label>
+                    </div>
+                    <br>
+                    <br>
+
+                    <div class="col-md-12 py-5" style="margin-left:auto">
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x">Tindakan <span class="text">Gigi</span>.</h3>
+                    </div>
+
+
+                    <div class="col-md-12 py-5" style="margin-left:auto">
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x"></h3>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-12" for="example-multiple-select">Tindakan</label>
+                        <div class="col-md-5">
+                            <select class="form-control" id="KatJenis" size="7"></select>
+
+                        </div>
+                        <div class="col-md-5">
+                            <select asp-for="IdJenisTindakan" class="form-control" id="JenisTindakan" size="7"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 py-5" style="margin-left:auto">
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x"> </h3>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">keterangan</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control" id="keterangan" name="material-text" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Diagnosis" class="col-md-2 col-form-label">Diagnosis</label>
+                        <div class="col-lg-7">
+                            <textarea asp-for="Diagnosis" id="Diagnosis" class="form-control form-control-lg" rows="2" cols="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="biaya" class="col-md-2 col-form-label">Biaya</label>
+                        <div class="col-lg-7">
+                            <input asp-for="biaya" id="biaya" class="form-control" name="material-text" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 py-5" style="margin-left:auto">
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x"> </h3>
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x"> </h3>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8">
+                            <button type="button" id="btnedit" class="btn btn-warning min-width-125">Reset</button>
+                            <button type="submit" value="Submit" class="btn btn-primary min-width-125">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+                <table id="list_Tindakan_Transaksi" class="table table-sm table-striped table-bordered m-2">
+                    <thead>
+                        <tr>
+                            <th>Posisi</th>
+                            <th>Jenis Tindakan</th>
+                            <th>Diagnosis</th>
+                            <th>Biaya</th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <br />
+                <br />
+
+            </div>
+            
+        </div>
+    </div>
+    </main>
+    <script src="~/assets/js/core/jquery.min.js"></script>
+    <script src="~/assets/js/codebase.core.min.js"></script>
+    <script src="~/assets/js/codebase.app.min.js"></script>
+    <script src="~/assets/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script>
+    function autofill(){
+    var tenant = '@Context.Session.GetString("TenantID")';
+    var Katjenis = $('#KatJenis');
+    //JenisT.append('<option value="val">test1</option>');
+    if (Katjenis != '') {
+        $('#JenisTindakan').prop('readonly', true);
+    }
+  $.ajax({
+    url: "http://localhost:30512/api/KatJenis/getkatjenisbytenantid?TenantID="+ tenant,
+    method: "get",
+    dataType: "json",
+    success: function(data) {
+        console.log(data);
+      console.log("Success:");
+                        Katjenis.empty();
+                             $(data).each(function (index, item) {
+                            Katjenis.append($('<option/>', { value: item.idKatJenis, text: item.kategoriName }));
+                        });
+
+
+    },
+    error: function(jqXHR, textStatus, errorThrown) {}
+  });
+}
+    var gigi = document.forms["Tindakan"];
+    var array = [];
+    $(document).ready(function () {
+        //for (var i = 0; i < gigi.length; i++) {
+        //    array[i] = {kuadran : "", nomerGigi : ""}
+        //}
+    });
+    function pilihgigi() {
+        var gigi = document.forms["Tindakan"];
+        var txt = "";
+        var i;
+        for (i = 0; i < gigi.length; i++) {
+            if (gigi[i].checked) {
+                txt = txt + gigi[i].value + " " + ",";
+            }
+        }
+        document.getElementById("posisi").value = txt;
+    }
+    function Getransaksi() {
+     var token = '@Context.Session.GetString("JWTtoken")';
+    $.ajax({
+        url: "http://localhost:30512/api/Transaksi/" + @Model.IdTransaksi,
+        method: "get",
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        success: function (data) {
+            console.log(data);
+            console.log("Success:");
+            document.getElementById('idpasien').value = data.idPasien;
+            document.getElementById('tanggal').value = data.tanggal;
+            document.getElementById('Anamnesis').value = data.anamnesis;
+        },
+        });
+    }
+     function Gettindakan() {
+        var Jtindakan = $("#JenisTindakan");
+
+        var token = '@Context.Session.GetString("JWTtoken")';
+        Jtindakan.change(function () {
+            if ($(this).val() == "0") {
+                Jtindakan.val("0");
+            }
+            else {
+                $.ajax({
+                    url: "http://localhost:30512/api/jenistindakan/" + $(this).val(),
+                    method: "get",
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    success: function (data) {
+                         console.log(data);
+                        console.log("Success:");    
+                        document.getElementById('biaya').value = data.biaya;
+                        document.getElementById('keterangan').value = data.keterangan;
+
+
+                    }
+                });
+            }
+        });
+    }
+     function AfterSubmit() {
+        var Anamnesis = $('#Anamnesis').val();
+        var tanggal = $('#tanggal').val();
+        if (Anamnesis != '' && tanggal != '') {
+            $("#btnedit").attr("hidden", false);
+            $("#submitBtn").attr("hidden", true);
+            $("#Anamnesis").attr("readonly", true);
+        }
+    }
+    function Check1() {
+        var Anamnesis = $('#Anamnesis').val();
+        var tanggal = $('#tanggal').val();
+        if (Anamnesis == '' && tanggal == '') {
+            $("#btnedit").attr("hidden", false);
+            $("#submitBtn").attr("hidden", true);
+            $("#Anamnesis").attr("readonly", true);
+        }
+    }
+
+
+    //function pilihgigi(value) {
+
+    //var i;
+    //var tampungan = {};
+    //var kuadran = "";
+    //var nomerGigi = "";
+    //for (i = 0; i < gigi.length; i++) {
+    //    if (gigi[i].checked) {
+    //        kuadran = gigi[i].value.slice("", 1);
+    //        nomerGigi = gigi[i].value.substring(2, 3);
+    //        Object.assign(tampungan, { kuadran: kuadran, nomerGigi: nomerGigi })
+    //        array[i] = tampungan;
+    //        console.log(gigi[i].value);
+    //    }
+
+    //}
+    //console.log(array);
+    //kuadran = value.slice("", 1);
+    //nomerGigi = value.substring(2, 3);
+    //for (i = 0; i <= gigi.length; i++) {
+    //kuadran.slice("", 1);
+    //Object.assign(tampungan, { kuadran: kuadran,nomerGigi:nomerGigi})
+    //console.log(tampungan);
+    //array[index] = tampungan;
+    //console.log(array);
+    //console.log(gigi[i].checked)
+    //    if (gigi[i].checked) return
+
+    //    else{
+
+    //        txt = txt + gigi[i].value;
+    //        kuadran[i] = txt.slice("", 1);
+    //        findgigi[i] = txt.split(kuadran[i] + "-", 3);
+
+    //    }
+
+
+    ////}
+    //console.log(findgigi);
+    //document.getElementById('posisi').value = "Kuadran" +kuadran +" ( " + findgigi + " ) ";
+    //}
+    </script>
+    @section Scripts{
+        <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+    }
+<script type="text/javascript">
+    $(document).ready(function () {
+        Getransaksi();
+        autofill();
+        Gettindakan();
+        Check1();
+        ShowAllReservation();
+        $("#btnedit").attr("hidden", false);
+         $("#JenisTindakan").attr("hidden", true);
+        AfterSubmit();
+        $('#tanggal').datepicker({
+            useCurrent: true
+
+        });
+        var Kjenis = $("#KatJenis");
+        var Jtindakan = $("#JenisTindakan");
+         function ShowAllReservation() {
+              $("table").attr("list_Tindakan_Transaksi");
+                $.ajax({
+                     url: "http://localhost:30512/api/Tindakan/sorttransaksi/" + @Model.IdTransaksi,
+                    method: "get",
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    success: function (result, status, xhr) {
+                        $.each(result, function (index, value) {
+                            $("tbody").append($("<tr>"));
+                            appendElement = $("tbody tr").last();
+                            panelInfo = [];
+
+                            $.each (value.gigiRawat, function(index, courses)
+                            {
+                                panelInfo.push( courses.kuadran + ":" + courses.gigiPosisi )
+                                //var arrString = panelInfo.join(", ");
+                            })
+                            var arrstring = JSON.parse(JSON.stringify(panelInfo));
+                          var string = $.map(arrstring, function(obj){
+                                return obj.kuadran
+                          }).join(' ');
+
+                            var test3 = $.map(arrstring, function(obj){return JSON.stringify(obj)}).join(' , ')
+                            //panelInfo.toString();
+                            //var test = arrstring.join(" , ");
+                            appendElement.append($("<td>").html("Kuadran  (" + test3 +" )"));
+                            appendElement.append($("<td>").html(value.jenisTindakan["jenis"]));
+                            appendElement.append($("<td>").html(value["tenantID"]));
+                            appendElement.append($("<td>").html(value["biaya"]));
+                            appendElement.append($("<td>").html("<a href=\"/Tindakan/TambahEditDataTindakan?Id=" + value["idTindakan"] + "\">Edit</a>"));
+                            appendElement.append($("<td>").html("<a href=\"/Tindakan/TambahEditDataTindakan?Id=" + value["id"] + "\">Delete</a>"));
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr)
+                    }
+                });
+            }
+        var token = '@Context.Session.GetString("JWTtoken")';
+        Kjenis.change(function () {
+            if ($(this).val() == "0") {
+                $("#JenisTindakan").attr("hidden", true);
+                Jtindakan.val("0");
+            }
+            else {
+                $.ajax({
+                    url: "http://localhost:30512/api/jenistindakan/sort-id-katjenis/" + $(this).val(),
+                    method: "get",
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    success: function (data) {
+                        $("#JenisTindakan").attr("hidden", false);
+
+                        console.log("Success:");
+                        Jtindakan.empty();
+
+                        $(data).each(function (index, item) {
+                            Jtindakan.append($('<option/>', { value: item.idJenisTindakan, text: item.jenis }));
+
+                        });
+                    }
+                });
+            }
+        });
+
+    });
+
+</script>
+

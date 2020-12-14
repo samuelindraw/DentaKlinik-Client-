@@ -1,0 +1,288 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.DetailPegawai
+@{
+    ViewData["Title"] = "TambahEditDetailPegawai";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Bootstrap Forms Validation -->
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Detail Pegawai</h3>
+    </div>
+    @if (TempData["alert"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (TempData["success"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    <!-- Mega Form -->
+<div class="block-content">
+    @if (Context.Session.GetString("Userrole") == "Admin")
+    {
+        <form asp-action="CreatePost" method="post">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <label asp-for="Username">Username  :</label>
+                            <input asp-for="Username" class="form-control form-control-lg"  />
+                            <span asp-validation-for="Username" class="text-danger" />
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Jabatan">Jabatan :</label>
+                            <input asp-for="Jabatan" class="form-control"  />
+                            <span asp-validation-for="Jabatan" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12">
+                        <label asp-for="TanggalJoin">TanggalJoin :</label>
+                        <input asp-for="TanggalJoin" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control"  />
+                        <span asp-validation-for="TanggalJoin" class="text-danger" />
+                    </div>
+                </div>
+                &nbsp;
+                &nbsp;
+                <div class="form-group row">
+                    <div class="col-12">
+                        <label asp-for="totaji">Gaji :</label>
+                        <input asp-for="totaji" class="form-control"  />
+                        <span asp-validation-for="totaji" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" value="Submit" class="btn btn-alt-primary">
+                        <i class="fa fa-check mr-5"></i> Complete Detail Pegawai
+                    </button>
+                </div>
+            </div>
+        </form>
+    }
+    else
+    {
+    <form asp-action="CreatePost" method="post">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label asp-for="Username">Username  :</label>
+                        <input asp-for="Username" class="form-control form-control-lg" readonly />
+                        <span asp-validation-for="Username" class="text-danger" />
+                    </div>
+                    <div class="col-6">
+                        <label asp-for="Jabatan">Jabatan :</label>
+                        <input asp-for="Jabatan" class="form-control" readonly />
+                        <span asp-validation-for="Jabatan" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <label asp-for="TanggalJoin">TanggalJoin :</label>
+                    <input asp-for="TanggalJoin" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" readonly />
+                    <span asp-validation-for="TanggalJoin" class="text-danger" />
+                </div>
+            </div>
+            &nbsp;
+            &nbsp;
+            <div class="form-group row">
+                <div class="col-12">
+                    <label asp-for="totaji">Gaji :</label>
+                    <input asp-for="totaji" class="form-control" readonly />
+                    <span asp-validation-for="totaji" class="text-danger" />
+                </div>
+            </div>
+        </div>
+    </form>
+    }
+</div>
+</div>
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script type="text/javascript">
+        function Delete(Id) {
+            alertify.confirm('Data Kategori','Apakah anda yakin untuk menghapus data ini ?!', function (e) {
+                if (e) {
+                    window.location.href = '@Url.Action("Delete", "TenantPengguna")/' + TenantPenggunaID,Id;
+                }
+                else {
+                     alertify.error("You've clicked Cancel");
+                }
+            }, null);
+
+    }
+          $(".clickable").click(function(){
+           window.location = $(this).data("href");
+     });
+
+
+</script>
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Data Penggajian<small></small></h3>
+    </div>
+    @if (TempData["alert"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (TempData["success"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (@Model.Jabatan == "Dokter")
+    {
+        <div class="block-content block-content-full">
+            <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Tanggal Gaji</th>
+                        <th>Tanggal Awal</th>
+                        <th>Tanggal Akhir</th>
+                        <th>Total Gaji</th>
+                        <th>Tenant</th>
+                        <th>Detail Penggajian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Penggajian)
+
+                    {
+                    <tr>
+                        <td>@item.Username</td>
+                        <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.TanggalGaji))</td>
+                        <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.TanggalAwal))</td>
+                        <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.TanggalAkhir))</td>
+                        <td>@item.Totaji</td>
+                        <td>@item.Tenant.TenantName</td>
+                        <td class="d-none d-sm-table-cell">
+                            <a href="@Url.Action("DetailPenggajian", "Penggajian", new { idGaji = item.IdGaji })" class="btn btn-sm btn-secondary m-5"><i class="fa fa-shopping-cart text-primary mr-5">Detail</i></a>
+                        </td>
+                    </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+
+    }
+    else
+    {
+        <div class="block-content block-content-full">
+            <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Tanggal Gaji</th>
+                        <th>Tanggal Awal</th>
+                        <th>Tanggal Akhir</th>
+                        <th>Total Gaji</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Penggajian)
+
+                    {
+                        <tr>
+                            <td>@item.Username</td>
+                            <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.TanggalGaji))</td>
+                            <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.TanggalAwal))</td>
+                            <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.TanggalAkhir))</td>
+                            <td>@item.Totaji</td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+    }
+    <br>
+    @if (@Model.Jabatan == "Dokter")
+    {
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">Data Prosentase<small></small></h3>
+            </div>
+            <div class="block-content block-content-full">
+                <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+                <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                    <thead>
+                        <tr>
+                            <th>tenantid</th>
+                            <th>Username</th>
+                            <th>Jenis tindakan</th>
+                            <th>Keterangan</th>
+                            <th>Prosen</th>
+                            <th>Tenant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Prosentase)
+
+                        {
+                        <tr>
+                            <td>@item.TenantID</td>
+                            <td>@item.Username</td>
+                            <td>@item.JenisTindakan.Jenis</td>
+                            <td>@item.JenisTindakan.Keterangan</td>
+                            <td>@item.Prosen</td>
+                            <td>@item.Tenant.TenantName</td>
+                        </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    }
+    </div>
+
+   
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}
+
+

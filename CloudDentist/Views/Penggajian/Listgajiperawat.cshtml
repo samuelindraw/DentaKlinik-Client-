@@ -1,0 +1,93 @@
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<CloudDentist.Models.Penggajian>
+@{
+    ViewData["Title"] = "Listgajiperawat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function Delete(Id) {
+            alertify.confirm('Data Kategori','Apakah anda yakin untuk menghapus data ini ?!', function (e) {
+                if (e) {
+                    window.location.href = '@Url.Action("Delete","Penggajian")/' + Id;
+                }
+                else {
+                     alertify.error("You've clicked Cancel");
+                }
+            }, null);
+
+        }
+</script>
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script src="~/assets/js/codebase.core.min.js"></script>
+<script src="~/assets/js/codebase.app.min.js"></script>
+<script src="~/assets/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+@*<partial name="_NotificationPanel" />*@
+<!-- Dynamic Table Full Pagination -->
+<h5>Pengaturan Gaji Perawat @Context.Session.GetString("Tenant")</h5>
+<p>Fasilitas ini digunakan untuk mengolah data gaji Perawat ke dalam sistem</p>
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Data Penggajian Perawat<small></small></h3>
+        <a href="@Url.Action("GajiPerawat","Penggajian")" class="btn btn-primary bottom-buffer" id="btn-add-Gaji" style="float:right;"><i class="fa fa-plus"></i> Gaji Perawat</a>
+    </div>
+    @if (TempData["alert"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (TempData["success"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    <div class="block-content block-content-full">
+        <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+        <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Tanggal Gaji</th>
+                    <th>Bulan Gaji</th>
+                    <th>Total Gaji</th>
+                    <th>Nama Tenant</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+
+                {
+                    <tr>
+                        <td>@item.Username</td>
+                        <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.TanggalGaji))</td>
+                        <td>@Convert.ToString(string.Format("{0:y}", item.TanggalGaji))</td>
+                        <td>@item.Totaji</td>
+                        <td>@item.Tenant.TenantName</td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}
+

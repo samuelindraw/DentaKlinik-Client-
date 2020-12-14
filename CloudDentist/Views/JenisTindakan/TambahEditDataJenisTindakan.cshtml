@@ -1,0 +1,139 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.JenisTindakan
+@{
+    ViewData["Title"] = "TambahEditDataJenisTindakan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Bootstrap Forms Validation -->
+<h2 class="content-heading">Form Edit - Jenis Tindakan</h2>
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Jenis Tindakan</h3>
+        <div class="block-options">
+            <button type="button" class="btn-block-option">
+                <i class="si si-wrench"></i>
+            </button>
+        </div>
+    </div>
+    <div class="block-content">
+        <div class="row justify-content-center py-20">
+            <div class="col-xl-6">
+                <!-- jQuery Validation functionality is initialized in js/pages/be_forms_validation.min.js which was auto compiled from _es6/pages/be_forms_validation.js -->
+                <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                <form asp-action="CreatePost" method="post">
+                    @Html.HiddenFor(model => model.IdJenisTindakan)
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Jenis">Jenis Tindakan :</label>
+                            <input asp-for="Jenis" class="form-control" />
+                            <span asp-validation-for="Jenis" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="IdKatJenis">Kategori Jenis</label>
+                            <select class="form-control" id="IdKatJenis" name="IdKatJenis">
+                                @if (Model.IdKatJenis == 0)
+                                {
+                                    <option>Select Kategori Jenis</option>
+
+                                }
+                                else
+                                {
+                                    <selected>@Model.KatJenis.KategoriName</selected>
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label asp-for="Biaya">Harga Biaya :</label>
+                            <input asp-for="Biaya" class="form-control" />
+                            <span asp-validation-for="Biaya" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row" hidden>
+                        <div class="col-12">
+                            <label asp-for="TenantID">Tenant</label>
+                            <input asp-for="TenantID"  value ="@Context.Session.GetString("TenantID")"class="form-control" />
+                            <span asp-validation-for="TenantID" class="text-danger" />
+                        </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <label asp-for="Keterangan">Keterangan :</label>
+                    <input asp-for="Keterangan" class="form-control" />
+                    <span asp-validation-for="Keterangan" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-8 ml-auto">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </div>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            var options = {};
+            var obj = {};
+            obj.token = ('@Context.Session.GetString("JWTtoken")');
+            obj.tenant = ('@Context.Session.GetString("TenantID")');
+            options.data = JSON.stringify(obj);
+            sessionStorage.setItem("token", obj.token);
+            sessionStorage.setItem("tenant", obj.tenant);
+            options.url = "http://localhost:30512/api/KatJenis/getkatjenisbytenantid/" + sessionStorage.getItem("tenant");
+            options.type = "GET";
+            options.beforeSend = function (request) {
+            request.setRequestHeader("Authorization",
+            "Bearer " + sessionStorage.getItem("token"));
+            };
+                options.dataType = "json";
+            options.success = function (data) {
+                console.log(data);
+                    data.forEach(function (element) {
+                        $("#IdKatJenis").append("<option value='" + element.idKatJenis + "'>" + element.kategoriName + "</option>");
+                    });
+                };
+                options.error = function () {
+                    $("#msg").html("Error while calling the Web API!");
+
+            };
+                $.ajax(options);
+        });
+     $(document).ready(function () {
+            var options = {};
+            var obj = {};
+            obj.token = ('@Context.Session.GetString("JWTtoken")');
+            options.data = JSON.stringify(obj);
+            sessionStorage.setItem("token", obj.token);
+            options.url = "http://localhost:30512/api/Tenant";
+            options.type = "GET";
+            options.beforeSend = function (request) {
+            request.setRequestHeader("Authorization",
+            "Bearer " + sessionStorage.getItem("token"));
+            };
+                options.dataType = "json";
+                options.success = function (data) {
+                    data.forEach(function (element) {
+                        $("#tenantID").append("<option value='" + element.tenantID + "'>" + element.tenantName + "</option>");
+                    });
+                };
+                options.error = function () {
+                    $("#msg").html("Error while calling the Web API!");
+
+            };
+                $.ajax(options);
+        });
+</script>
+
+<!-- Bootstrap Forms Validation -->

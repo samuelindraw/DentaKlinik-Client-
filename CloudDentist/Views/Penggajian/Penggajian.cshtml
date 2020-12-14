@@ -1,0 +1,103 @@
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<CloudDentist.Models.Penggajian>
+@{
+    ViewData["Title"] = "Penggajian";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function Delete(Id) {
+            alertify.confirm('Data Kategori','Apakah anda yakin untuk menghapus data ini ?!', function (e) {
+                if (e) {
+                    window.location.href = '@Url.Action("Delete","Penggajian")/' + Id;
+                }
+                else {
+                     alertify.error("You've clicked Cancel");
+                }
+            }, null);
+
+        }
+</script>
+<script src="~/assets/js/core/jquery.min.js"></script>
+<script src="~/assets/js/codebase.core.min.js"></script>
+<script src="~/assets/js/codebase.app.min.js"></script>
+<script src="~/assets/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+@*<partial name="_NotificationPanel" />*@
+<!-- Dynamic Table Full Pagination -->
+<!-- Dynamic Table Full Pagination -->
+<h5>Pengaturan Data User @Context.Session.GetString("Tenant")</h5>
+<p>Fasilitas ini digunakan untuk mengolah data gaji Dokter ke dalam sistem</p>
+<div class="block">
+    <div class="block-header block-header-default">
+        <h3 class="block-title">Data Penggajian Dokter</h3>
+        <a href="@Url.Action("GajiDokter","Penggajian")" class="btn btn-primary bottom-buffer" id="btn-add-databarang" style="float:right;"><i class="fa fa-plus"></i> Penggajian</a>
+    </div>
+    @if (TempData["alert"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    @if (TempData["success"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+        </script>
+    }
+    <div class="block-content block-content-full">
+        <!-- DataTables functionality is initialized with .js-dataTable-full-pagination class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+        <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Tanggal Gaji</th>
+                    <th>Masa Waktu</th>
+                    <th>Tanggal Awal</th>
+                    <th>Tanggal Akhir</th>
+                    <th>Total Gaji</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+
+                {
+                    <tr>
+                        <td>@item.Username</td>
+                        <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.TanggalGaji))</td>
+                        <td>@item.MasaWaktu</td>
+                        <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.TanggalAwal))</td>
+                        <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.TanggalAkhir))</td>
+                        <td>@item.Totaji</td>
+                        @*<td class="d-none d-sm-table-cell">@string.Join(",", item.Barang.ToList().Select(x => x.NamaBarang))</td>
+                            <td class="d-none d-sm-table-cell"><a>@string.Join(",", item.Barang.ToList().Select(x => x.Stok))</a></td>*@
+                        <td class="d-none d-sm-table-cell">
+                            <a href="@Url.Action("DetailPenggajian", "Penggajian", new { idGaji = item.IdGaji })" class="btn btn-sm btn-secondary m-5"><i class="fa fa-glass mr-5">Detail</i></a>
+                            <a href="@Url.Action("GajiDokter", "Penggajian", new { id = item.IdGaji })" class="btn btn-sm btn-secondary m-5"><i class="fa fa-edit mr-5">Edit</i></a>
+                            <a onclick="Delete(@item.IdGaji)" class="float-sm-right btn-sm btn-secondary m-5"><i class="fa fa-times text-danger mr-5">Delete</i></a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+}

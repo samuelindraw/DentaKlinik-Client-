@@ -1,0 +1,704 @@
+﻿@using Microsoft.AspNetCore.Http
+@model CloudDentist.Models.Tindakan
+@{
+    ViewData["Title"] = "TambahEditDataTindakan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Main Container -->
+<main id="main-container">
+
+    <!-- Page Content -->
+    <div class="content">
+        <h2 class="content-heading">Anamnesis dan Diagnosis</h2>
+        <p>Fasilitas ini digunakan untuk mencatat data anamnesis dan diagnosis pasien tiap pemeriksaaan</p>
+        <p>
+            <a id="ContentPlaceHolder1_linkObat" href="@Url.Action("list_transaksi_pasien", "Transaksi", new { id = @Context.Session.GetString("pasien_Periksa"), tenantid = @Context.Session.GetString("TenantID") })"> Rekam Medis </a>
+            <a id="ContentPlaceHolder1_linkObat" href="@Url.Action("Tambah_edit_Transaksi", "Transaksi", new { Id = @Model.IdTransaksi, tenantid = @Context.Session.GetString("TenantID") })"> | Anamnesis </a>
+            <strong><span>| Diagnosis @*&amp;*@ </span></strong>
+            <a id="ContentPlaceHolder1_linkObat" href="@Url.Action("TambahEditDataJual", "Jual", new { idtransaksi = @Model.IdTransaksi,tenantid = @Context.Session.GetString("TenantID") })"> | Pemberian Obat & Resep </a>
+            <a id="ContentPlaceHolder1_linkObat" href="@Url.Action("Transaksi_Selesai", "Transaksi", new { idtransaksi = @Model.IdTransaksi })"> | Selesai </a>
+            <a id="con_selesai" href="@Url.Action("Transaksi_Batal", "Transaksi", new { idtransaksi = @Model.IdTransaksi })"> | Batalkan Pemeriksaan </a>
+        </p>
+
+        <!-- Dummy content -->
+        <div class="block">
+            <div class="block-content">
+                <form asp-action="TambahEditDataTindakan" asp-controller="Tindakan" method="post" id="form-add">
+                    @Html.HiddenFor(model => model.IdTindakan)
+                    @Html.HiddenFor(model => model.IdTransaksi)
+                    <div class="form-group row" hidden>
+                        <label class="col-lg-2 col-form-label">TenantID</label>
+                        <span> <input asp-for="TenantID" value="@Context.Session.GetString("TenantID")" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row" hidden>
+                        <span> <input asp-for="IdTransaksi" value="@Model.IdTransaksi" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">ID Pasien</label>
+                        <span> <input asp-for="Transaksi.IdPasien" id="idpasien" class="form-control" readonly /></span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Tanggal</label>
+                        <span> <input id="tanggal" type="date" class="form-control" /></span>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <label>Anamnesis</label>
+                            <textarea id="Anamnesis" class="form-control form-control-lg" rows="2" cols="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8">
+                            <a href="@Url.Action("TambahEditDataTindakan", "Tindakan", new { idtransaksi = @Model.IdTransaksi, tenantID = @Context.Session.GetString("TenantID") })" class="btn btn-alt-primary"> <i class="fa fa-shopping-cart text-danger mr-5"></i> Tambah Data Tindakan</a>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="col-md-12 py-5" style="margin-left:auto">
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x">Lokasi <span class="text">Gigi</span>.</h3>
+                    </div>
+                    <div>
+                        <input id="CB_gigiSusuAtas" type="checkbox"><label for="ContentPlaceHolder1_chkGigiARA">Pilih Semua Rahang Atas Gigi Susu</label>
+                    </div>
+                    <div>
+                        <input id="CB_gigiDewasaAtas" type="checkbox"><label> Pilih Semua Rahang Atas Gigi Dewasa</label>
+                    </div>
+                    <div id="ContentPlaceHolder1_UpRA">
+                    </div>
+                    <table>
+
+                        <tbody>
+                            <tr>
+                                @for (int i = 0; i < Model.GigiRawatK1.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatK1[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatK1[i].gigiPosisi)
+                                        <input type="checkbox" class="checkboxk1" id="checkboxgigi1" asp-for="@Model.GigiRawatK1[i].IsChecked" />
+                                    </td>
+
+                                }
+                                <td>&nbsp;</td>
+                                @for (int i = 0; i < Model.GigiRawatK2.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatK2[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatK2[i].gigiPosisi)
+                                        <input type="checkbox" class="checkboxk2" id="checkboxgigi2" asp-for="@Model.GigiRawatK2[i].IsChecked" />
+                                    </td>
+
+                                }
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi18" onclick="gigi18_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi17" onclick="gigi17_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi16" onclick="gigi16_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi15" onclick="gigi15_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi14" onclick="gigi14_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi13" onclick="gigi13_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi12" onclick="gigi12_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi11" onclick="gigi11_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi21" onclick="gigi21_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi22" onclick="gigi22_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi23" onclick="gigi23_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi24" onclick="gigi24_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi25" onclick="gigi25_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi26" onclick="gigi26_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi27" onclick="gigi27_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi28" onclick="gigi28_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                @for (int i = 0; i < Model.GigiRawatKI.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatKI[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatKI[i].gigiPosisi)
+                                        <input type="checkbox" class="checkboxkI" id="checkboxgigiI" asp-for="@Model.GigiRawatKI[i].IsChecked" />
+                                    </td>
+                                }
+                                <td>&nbsp;</td>
+                                @for (int i = 0; i < Model.GigiRawatKII.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatKII[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatKII[i].gigiPosisi)
+                                        <input type="checkbox" class="checkboxkII" id="checkboxgigiII" asp-for="@Model.GigiRawatKII[i].IsChecked" />
+                                    </td>
+                                }
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi1e" onclick="gigi1e_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi1d" onclick="gigi1d_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi1c" onclick="gigi1c_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi1b" onclick="gigi1b_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi1a" onclick="gigi1a_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi2a" onclick="gigi2a_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi2b" onclick="gigi2b_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi2c" onclick="gigi2c_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi2d" onclick="gigi2d_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi2e" onclick="gigi2e_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi4e" onclick="gigi4e_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi4d" onclick="gigi4d_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi4c" onclick="gigi4c_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi4b" onclick="gigi4b_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi4a" onclick="gigi4a_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi3a" onclick="gigi3a_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi3b" onclick="gigi3b_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi3c" onclick="gigi3c_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi3d" onclick="gigi3d_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi3e" onclick="gigi3e_Click" src="../pics/gigi_susu.jpg">
+                                </td>
+                                <td></td>
+                            </tr>
+
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                @for (int i = 0; i < Model.GigiRawatKIV.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatKIV[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatKIV[i].gigiPosisi)
+                                        <input type="checkbox" class="checkboxkIV" id="checkboxgigiIV" asp-for="@Model.GigiRawatKIV[i].IsChecked" />
+                                    </td>
+                                }
+                                <td>&nbsp;</td>
+                                @for (int i = 0; i < Model.GigiRawatKIII.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatKIII[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatKIII[i].gigiPosisi)
+                                        <input type="checkbox" class="checkboxkIII" id="checkboxgigiIII" asp-for="@Model.GigiRawatKIII[i].IsChecked" />
+                                    </td>
+                                }
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi48" onclick="gigi48_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi47" onclick="gigi47_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi46" onclick="gigi46_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi45" onclick="gigi45_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi44" onclick="gigi44_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi43" onclick="gigi43_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi42" onclick="gigi42_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi41" onclick="gigi41_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi31" onclick="gigi31_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi32" onclick="gigi32_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi33" onclick="gigi33_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi34" onclick="gigi34_Click1" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi35" onclick="gigi35_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi36" onclick="gigi36_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi37" onclick="gigi37_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                                <td>
+                                    <img id="ContentPlaceHolder1_gigi38" onclick="gigi38_Click" src="../pics/gigi_dewasa.jpg">
+                                </td>
+                            </tr>
+                            <tr>
+                                @for (int i = 0; i < Model.GigiRawatK4.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatK4[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatK4[i].gigiPosisi)
+                                        <input type="checkbox" class="checkboxk4" id="checkboxgigi4" asp-for="@Model.GigiRawatK4[i].IsChecked" />
+                                    </td>
+
+                                }
+                                <td>&nbsp;</td>
+                                @for (int i = 0; i < Model.GigiRawatK3.Count; i++)
+                                {
+                                    <td>
+                                        @Html.HiddenFor(a => Model.GigiRawatK3[i].id)
+                                        @Html.DisplayFor(a => Model.GigiRawatK3[i].gigiPosisi)
+                                        <input type="checkbox" class="checkboxk3" id="checkboxgigi3" asp-for="@Model.GigiRawatK3[i].IsChecked" />
+                                    </td>
+
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <input id="CB_gigiSusuBawah" type="checkbox">&nbsp;<label> Pilih Semua Rahang Bawah Gigi Susu</label>
+                    </div>
+                    <div>
+                        <input id="CB_gigiDewasaBawah" type="checkbox">&nbsp;<label> Pilih Semua Rahang Bawah Gigi Dewasa</label>
+                    </div>
+                    <br>
+                    <div class="col-md-12 py-5" style="margin-left:auto">
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x">Tindakan <span class="text">Gigi</span>.</h3>
+                    </div>
+
+
+                    <div class="col-md-12 py-5" style="margin-left:auto">
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x"></h3>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-12" for="example-multiple-select">Tindakan</label>
+                        <div class="col-md-5">
+                            <select asp-for="JenisTindakan.IdKatJenis" class="form-control" id="KatJenis" size="7"></select>
+
+                        </div>
+                        <div class="col-md-5">
+                            <select asp-for="IdJenisTindakan" class="form-control" id="JenisTindakan" size="7"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 py-5" style="margin-left:auto">
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x"> </h3>
+                    </div>
+                    <div class="form-group row">
+                        <label id="lbl_ket" class="col-md-2 col-form-label">keterangan</label>
+                        <div class="col-lg-7">
+                            <input asp-for="JenisTindakan.Keterangan" type="text" class="form-control" id="keterangan" name="material-text" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Diagnosis" class="col-md-2 col-form-label">Diagnosis</label>
+                        <div class="col-lg-7">
+                            <textarea asp-for="Diagnosis" id="Diagnosis" class="form-control form-control-lg" rows="2" cols="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Biaya</label>
+                        <div class="col-lg-7">
+                            <span> &nbsp;<input asp-for="BiayaDasar" id="BiayaDasar" class="form-control" /></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 py-5" style="margin-left:auto">
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x"> </h3>
+                        <h3 class="h4 font-w700 text-uppercase pb-10 border-b border-10x"> </h3>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8">
+                            <button type="button" id="btnedit" class="btn btn-warning min-width-125">Reset</button>
+                            <button type="submit" value="Submit" class="btn btn-primary min-width-125">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+                <table id="list_Tindakan_Transaksi" class="table table-sm table-striped table-bordered m-2">
+                    <thead>
+                        <tr>
+                            <th>Posisi</th>
+                            <th>Jenis Tindakan</th>
+                            <th>Diagnosis</th>
+                            <th>Biaya</th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <br />
+                <br />
+
+            </div>
+
+        </div>
+    </div>
+</main>
+<script src="~/assets/js/core/jquery.min.js"></script>
+@*<script src="~/assets/js/codebase.core.min.js"></script>*@
+<script src="~/assets/js/codebase.app.min.js"></script>
+<script src="~/assets/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+<script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+@if (TempData["alert"] != null)
+{
+    <script>
+            swal("Hapus Data!!", "@TempData["Pesan"]", "error");
+    </script>
+}
+@if (TempData["success"] != null)
+{
+
+    <script>
+            swal("Berhasil", "@TempData["Pesan"]", "success");
+    </script>
+}
+@if (TempData["error"] != null)
+{
+
+    <script>
+            swal("ERROR", "@TempData["Pesan"]", "error");
+    </script>
+}
+<script>
+                        function autofill() {
+                        var token = '@Context.Session.GetString("JWTtoken")';
+                        var tenant = '@Context.Session.GetString("TenantID")';
+                        var Katjenis = $('#KatJenis');
+                        //JenisT.append('<option value="val">test1</option>');
+                        if (Katjenis != '') {
+                                    $('#JenisTindakan').prop('readonly', true);
+                                                    }
+                              $.ajax({
+                                url: "http://localhost:30512/api/KatJenis/getkatjenisbytenantid/"+ tenant,
+                                  method: "get",
+                                 headers: {
+                                    Authorization: 'Bearer ' + token,
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                                dataType: "json",
+                                success: function(data) {
+                                console.log(data);
+                                console.log("Success:");
+                                Katjenis.empty();
+                             $(data).each(function (index, item) {
+                                    Katjenis.append($('<option/>', { value: item.idKatJenis, text: item.kategoriName }));
+                                });
+
+
+                            },
+    error: function(jqXHR, textStatus, errorThrown) {}
+                        });
+                    }
+                    var gigi = document.forms["Tindakan"];
+
+    var idpasient = "kosong";
+    var token = '@Context.Session.GetString("JWTtoken")';
+    function Getransaksi() {
+
+
+        $.ajax({
+        url: "http://localhost:30512/api/Transaksi/" + @Model.IdTransaksi,
+        method: "get",
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+         dataType: "json",
+        success: function (data) {
+            console.log(data);
+            console.log("Success:");
+            idpasient = data.idPasien;
+            document.getElementById('idpasien').value = data.idPasien;
+            document.getElementById('tanggal').value = data.tanggal;
+            document.getElementById('Anamnesis').value = data.anamnesis;
+
+        },
+        });
+    }
+     function Gettindakan() {
+        var Jtindakan = $("#JenisTindakan");
+        var tenant = '@Context.Session.GetString("TenantID")';
+        var token = '@Context.Session.GetString("JWTtoken")';
+        Jtindakan.change(function () {
+            if ($(this).val() == "0") {
+                Jtindakan.val("0");
+            }
+            else {
+               $.ajax({
+                    url: "http://localhost:30512/api/jenistindakan/" + $(this).val(),
+                    method: "get",
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                   },
+                   dataType: "json",
+                    success: function (data) {
+                         console.log(data);
+                        console.log("Success:");
+                        document.getElementById('BiayaDasar').value = data.biaya;
+                        document.getElementById('keterangan').value = data.keterangan;
+
+
+                    }
+                });
+            }
+        });
+    }
+     function AfterSubmit() {
+        var Anamnesis = $('#Anamnesis').val();
+        var tanggal = $('#tanggal').val();
+        if (Anamnesis != '' && tanggal != '') {
+            $("#btnedit").attr("hidden", false);
+            $("#submitBtn").attr("hidden", true);
+            $("#Anamnesis").attr("readonly", true);
+        }
+    }
+    function Check1() {
+        var Anamnesis = $('#Anamnesis').val();
+        var tanggal = $('#tanggal').val();
+        if (Anamnesis == '' && tanggal == '' ) {
+            $("#btnedit").attr("hidden", false);
+            $("#submitBtn").attr("hidden", true);
+            $("#Anamnesis").attr("readonly", true);
+            $("#Anamnesis").attr("readonly", true);
+        }
+    }
+</script>
+@section Scripts{
+    <script src="~/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/assets/jquery.validate.unobtrusive.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        Getransaksi();
+        autofill();
+        Gettindakan();
+        Check1();
+        ShowAllReservation();
+        var token = '@Context.Session.GetString("JWTtoken")';
+        $("#btnedit").attr("hidden", false);
+         $("#JenisTindakan").attr("hidden", true);
+        AfterSubmit();
+        $('#tanggal').datepicker({
+            useCurrent: true
+
+        });
+        $('#CB_gigiDewasaAtas').click(function () {
+            if ($(this).is(":checked")) {
+                $(".checkboxk1").attr('checked', this.checked);
+                $(".checkboxk2").attr('checked', this.checked);
+            }
+             else {
+                $(".checkboxk1").attr('checked', false);
+                $(".checkboxk2").attr('checked', false);
+            }
+
+        });
+         $('#CB_gigiDewasaBawah').click(function () {
+            if ($(this).is(":checked")) {
+                $(".checkboxk3").attr('checked', this.checked);
+                $(".checkboxk4").attr('checked', this.checked);
+            }
+             else {
+                $(".checkboxk3").attr('checked', false);
+                $(".checkboxk4").attr('checked', false);
+            }
+
+         });
+         $('#CB_gigiSusuAtas').click(function () {
+            if ($(this).is(":checked")) {
+                $(".checkboxkI").attr('checked', this.checked);
+                $(".checkboxkII").attr('checked', this.checked);
+            }
+             else {
+                $(".checkboxk3").attr('checked', false);
+                $(".checkboxk4").attr('checked', false);
+            }
+
+         });
+         $('#CB_gigiSusuBawah').click(function () {
+            if ($(this).is(":checked")) {
+                $(".checkboxkIII").attr('checked', this.checked);
+                $(".checkboxkIV").attr('checked', this.checked);
+            }
+             else {
+                $(".checkboxkIII").attr('checked', false);
+                $(".checkboxkIV").attr('checked', false);
+            }
+
+        });
+        var Kjenis = $("#KatJenis");
+        var Jtindakan = $("#JenisTindakan");
+        function ShowAllReservation() {
+              var token = '@Context.Session.GetString("JWTtoken")';
+              $("table").attr("list_Tindakan_Transaksi");
+                $.ajax({
+                     url: "http://localhost:30512/api/Tindakan/sorttransaksi/" + @Model.IdTransaksi,
+                    method: "get",
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    success: function (result, status, xhr) {
+                        $.each(result, function (index, value) {
+                            $("tbody").append($("<tr>"));
+                            appendElement = $("tbody tr").last();
+                            panelInfo = [];
+                            console.log(result);
+                            $.each (value.gigiRawat, function(index, courses)
+                            {
+                                panelInfo.push( courses.kuadran + ":" + courses.gigiPosisi )
+                                //var arrString = panelInfo.join(", ");
+                            })
+                            var arrstring = JSON.parse(JSON.stringify(panelInfo));
+                          var string = $.map(arrstring, function(obj){
+                                return obj.kuadran
+                          }).join(' ');
+                            console.log(kuadran);
+                            var kuadran = $.map(arrstring, function(obj){return JSON.stringify(obj)}).join(' , ')
+                            //panelInfo.toString();
+                            //var test = arrstring.join(" , ");
+                            //console.log(test3);
+
+
+                            appendElement.append($("<td>").html("Kuadran  (" + kuadran +" )"));
+                            appendElement.append($("<td>").html(value.jenisTindakan["jenis"]));
+                            appendElement.append($("<td>").html(value["diagnosis"]));
+                            appendElement.append($("<td>").html(value["biaya"]));
+                            appendElement.append($("<td>").html("<a href=\"/Tindakan/TambahEditDataTindakan?Id=" + value["idTindakan"]+"&tenantID=" + value["tenantID"] + "\">Edit</a>"));
+                            appendElement.append($("<td>").html("<a href=\"/Tindakan/TambahEditDataTindakan?Id=" + value["id"] + "\">Delete</a>"));
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr)
+                    }
+                });
+            }
+
+        Kjenis.change(function () {
+            if ($(this).val() == "0") {
+                $("#JenisTindakan").attr("hidden", true);
+                Jtindakan.val("0");
+            }
+            else {
+                $.ajax({
+                    url: "http://localhost:30512/api/jenistindakan/sort-id-katjenis/" + $(this).val(),
+                    method: "get",
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    success: function (data) {
+                        $("#JenisTindakan").attr("hidden", false);
+
+                        console.log("Success:");
+                        Jtindakan.empty();
+
+                        $(data).each(function (index, item) {
+                            Jtindakan.append($('<option/>', { value: item.idJenisTindakan, text: item.jenis }));
+
+                        });
+                    }
+                });
+            }
+        });
+
+    });
+</script>
+
+
