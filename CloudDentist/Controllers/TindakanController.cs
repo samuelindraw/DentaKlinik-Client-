@@ -27,7 +27,7 @@ namespace CloudDentist.Controllers
                 using (HttpClient client = new HttpClient())
                 {
 
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     if (id == 0)
                     {
 
@@ -215,7 +215,7 @@ namespace CloudDentist.Controllers
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     if (obj.IdTindakan == 0)
                     {
                         client.DefaultRequestHeaders.Authorization =

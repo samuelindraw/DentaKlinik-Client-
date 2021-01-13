@@ -87,3 +87,4 @@ C:\Users\Samuel\source\repos\CloudDentist\CloudDentist\obj\Debug\netcoreapp2.2\R
 C:\Users\Samuel\source\repos\CloudDentist\CloudDentist\obj\Debug\netcoreapp2.2\Razor\Views\Penggajian\GajiPerawat.g.cshtml.cs
 C:\Users\Samuel\source\repos\CloudDentist\CloudDentist\obj\Debug\netcoreapp2.2\Razor\Views\Penggajian\Listgajiperawat.g.cshtml.cs
 C:\Users\Samuel\source\repos\CloudDentist\CloudDentist\obj\Debug\netcoreapp2.2\Razor\Views\Transaksi\CetakInvoice.g.cshtml.cs
+C:\Users\Samuel\source\repos\CloudDentist\CloudDentist\obj\Debug\netcoreapp2.2\CloudDentist.genruntimeconfig.cache

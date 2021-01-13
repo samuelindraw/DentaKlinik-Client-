@@ -25,7 +25,7 @@ namespace CloudDentist.Controllers
             }
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 string stringData = JsonConvert.SerializeObject(user);
                 var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage response = client.PostAsync("/api/User/Login", contentData).Result;

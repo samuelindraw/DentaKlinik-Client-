@@ -19,7 +19,7 @@ namespace CloudDentist.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
 
                 client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer",
@@ -48,7 +48,7 @@ namespace CloudDentist.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 if (id == 0)
                 {
                     return View(id);
@@ -80,7 +80,7 @@ namespace CloudDentist.Controllers
                 }
                 else
                 {
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
 
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer",
@@ -113,8 +113,8 @@ namespace CloudDentist.Controllers
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:30512");
-                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                         HttpContext.Session.GetString("JWTtoken"));
                         //var token = HttpContext.Session.GetString("JWTtoken");
                         string stringData = JsonConvert.SerializeObject(obj);

@@ -35,6 +35,7 @@ namespace CloudDentist.Models
 
         public Tenant Tenant { get; set; }
         public DetailPasien DetailPasien { get; set; }
+        public IEnumerable<Transaksi> Transaksi { get; set; }
         public IEnumerable<TenantPengguna> TenantPengguna { get; set; }
         public bool IsEnabled { get; set; }
         public bool Status { get; set; }

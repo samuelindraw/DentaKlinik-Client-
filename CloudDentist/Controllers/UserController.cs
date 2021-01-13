@@ -27,7 +27,7 @@ namespace CloudDentist.Controllers
             {
                 user.TenantID = HttpContext.Session.GetString("TenantID");
                 user.TanggalJoin = DateTime.Today;
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                 HttpContext.Session.GetString("JWTtoken"));
                 string stringData = JsonConvert.SerializeObject(user);
@@ -60,7 +60,7 @@ namespace CloudDentist.Controllers
             {
                 user.TenantID = HttpContext.Session.GetString("TenantID");
                 user.TanggalJoin = DateTime.Today;
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                 HttpContext.Session.GetString("JWTtoken"));
                 string stringData = JsonConvert.SerializeObject(user);
@@ -94,7 +94,7 @@ namespace CloudDentist.Controllers
             {
                 user.TenantID = HttpContext.Session.GetString("TenantID");
                 user.rolename = "Pasien";
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                 HttpContext.Session.GetString("JWTtoken"));
                 string stringData = JsonConvert.SerializeObject(user);
@@ -121,7 +121,7 @@ namespace CloudDentist.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512/");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer",
                 HttpContext.Session.GetString("JWTtoken"));
@@ -139,7 +139,7 @@ namespace CloudDentist.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer",
                 HttpContext.Session.GetString("JWTtoken"));
@@ -157,7 +157,7 @@ namespace CloudDentist.Controllers
 
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer",
                 HttpContext.Session.GetString("JWTtoken"));
@@ -177,8 +177,8 @@ namespace CloudDentist.Controllers
                 {
                         obj.rolename = HttpContext.Session.GetString("Userrole");
                         obj.Username = HttpContext.Session.GetString("Loginuser");
-                        client.BaseAddress = new Uri("http://localhost:30512");
-                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                         HttpContext.Session.GetString("JWTtoken"));
                         //var token = HttpContext.Session.GetString("JWTtoken");
                         string stringData = JsonConvert.SerializeObject(obj);
@@ -209,7 +209,7 @@ namespace CloudDentist.Controllers
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                     HttpContext.Session.GetString("JWTtoken"));
                     //var token = HttpContext.Session.GetString("JWTtoken");
@@ -241,7 +241,7 @@ namespace CloudDentist.Controllers
             }
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                 HttpContext.Session.GetString("JWTtoken"));
                 string stringData = JsonConvert.SerializeObject(EmailForget);
@@ -276,7 +276,7 @@ namespace CloudDentist.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                 HttpContext.Session.GetString("JWTtoken"));
                 string stringData = JsonConvert.SerializeObject(model);
@@ -310,7 +310,7 @@ namespace CloudDentist.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                 HttpContext.Session.GetString("JWTtoken"));
                 string stringData = JsonConvert.SerializeObject(model);

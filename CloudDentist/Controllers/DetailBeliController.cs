@@ -30,7 +30,7 @@ namespace CloudDentist.Controllers
                 else
                 {
                     HttpContext.Session.SetString("idBeli", id.ToString());
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
 
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer",
@@ -65,7 +65,7 @@ namespace CloudDentist.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer",
                 HttpContext.Session.GetString("JWTtoken"));
@@ -81,7 +81,7 @@ namespace CloudDentist.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 if (Id == null)
                 {
                     return View(new DetailBeli());
@@ -96,6 +96,7 @@ namespace CloudDentist.Controllers
                     HttpResponseMessage response = client.GetAsync("/api/DetailBeli/" + Id).Result;
                     string stringData = response.Content.ReadAsStringAsync().Result;
                     DetailBeli data = JsonConvert.DeserializeObject<DetailBeli>(stringData);
+                    HttpContext.Session.SetInt32("idbarang", data.IdBarang);
                     TempData["Pesan"] = "Saved Successfully";
                     return View(data);
 
@@ -111,7 +112,7 @@ namespace CloudDentist.Controllers
             //{
                 using (HttpClient client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     if (obj.DetailBeliId == null)
                     {
                        
@@ -138,12 +139,15 @@ namespace CloudDentist.Controllers
                     }
                     else
                     {
-                        
+                        if(obj.IdBarang == 0)
+                        {
+                          obj.IdBarang = (int)HttpContext.Session.GetInt32("idbarang");
+                        }
+                    
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                         HttpContext.Session.GetString("JWTtoken"));
                         //var token = HttpContext.Session.GetString("JWTtoken");
                         obj.IdBeli = Convert.ToInt32(HttpContext.Session.GetString("idBeli"));
-                        
                         string stringData = JsonConvert.SerializeObject(obj);
                         var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
                         HttpResponseMessage response = client.PutAsync("/api/DetailBeli/" + obj, contentData).Result;
@@ -151,6 +155,7 @@ namespace CloudDentist.Controllers
                         {
                             TempData["success"] = "success";
                             TempData["Pesan"] = response.Content.ReadAsStringAsync().Result;
+                            HttpContext.Session.Remove("idbarang");
                         }
                         else
                         {

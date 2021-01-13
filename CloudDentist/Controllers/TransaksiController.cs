@@ -25,7 +25,7 @@ namespace CloudDentist.Controllers
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer",
                     HttpContext.Session.GetString("JWTtoken"));
@@ -58,7 +58,7 @@ namespace CloudDentist.Controllers
                 using (HttpClient client = new HttpClient())
                 {
 
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     if (idtransaksi != 0)
                     {
                         client.DefaultRequestHeaders.Authorization =
@@ -87,8 +87,8 @@ namespace CloudDentist.Controllers
                         var totalharga = 0;
                         foreach (var item in data.Jual)
                         {
-                            totalharga = +item.Harga;
-                            data.TotalJual = data.TotalJual + totalharga;
+                            totalharga = Convert.ToInt32(data.TotalJual) + item.Harga;
+                            data.TotalJual = totalharga.ToString();
                         }
                         var totaltindakan = 0;
                         foreach (var item in data.Tindakan)
@@ -96,7 +96,7 @@ namespace CloudDentist.Controllers
                             totaltindakan = +item.biaya;
                             data.TotalBayarTindakan = data.TotalBayarTindakan + totaltindakan;
                         }
-                        data.TotalBayar = data.TotalBayarTindakan + data.TotalJual;
+                        data.TotalBayar = (data.TotalBayarTindakan + data.TotalJual);
                         TempData["Pesan"] = "Saved Successfully";
                         return View(data);
 
@@ -117,7 +117,7 @@ namespace CloudDentist.Controllers
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer",
                     HttpContext.Session.GetString("JWTtoken"));
@@ -147,7 +147,7 @@ namespace CloudDentist.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
 
                 client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer",
@@ -197,7 +197,7 @@ namespace CloudDentist.Controllers
             }
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:30512");
+                client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                 client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer",
                 HttpContext.Session.GetString("JWTtoken"));
@@ -234,7 +234,7 @@ namespace CloudDentist.Controllers
                 using (HttpClient client = new HttpClient())
                 {
 
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     if (idtransaksi != 0)
                     {
                         client.DefaultRequestHeaders.Authorization =
@@ -263,8 +263,9 @@ namespace CloudDentist.Controllers
                         var totalharga = 0;
                         foreach (var item in data.Jual)
                         {
-                            totalharga = +item.Harga;
-                            data.TotalJual = data.TotalJual + totalharga;
+                            
+                            totalharga = Convert.ToInt32(data.TotalJual) +  item.Harga;
+                            data.TotalJual = totalharga.ToString();
                         }
                         var totaltindakan = 0;
                         foreach (var item in data.Tindakan)

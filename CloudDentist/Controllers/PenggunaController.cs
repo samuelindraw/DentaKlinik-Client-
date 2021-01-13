@@ -29,7 +29,7 @@ namespace CloudDentist.Controllers
                 }
                 else
                 {
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
 
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer",
@@ -55,8 +55,8 @@ namespace CloudDentist.Controllers
                
                 if (HttpContext.Session.GetString("Userrole") == "Admin" || HttpContext.Session.GetString("Userrole") == "Dokter" || HttpContext.Session.GetString("Userrole") == "Perawat")
                 {
-                   
-                    client.BaseAddress = new Uri("http://localhost:30512");
+
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer",
                     HttpContext.Session.GetString("JWTtoken"));
@@ -90,7 +90,7 @@ namespace CloudDentist.Controllers
                 if (HttpContext.Session.GetString("Userrole") == "Admin" || HttpContext.Session.GetString("Userrole") == "Dokter" || HttpContext.Session.GetString("Userrole") == "Perawat")
                 {
 
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
 
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer",
@@ -129,8 +129,8 @@ namespace CloudDentist.Controllers
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    
-                    client.BaseAddress = new Uri("http://localhost:30512");
+
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                     HttpContext.Session.GetString("JWTtoken"));
                     //var token = HttpContext.Session.GetString("JWTtoken");
@@ -163,7 +163,7 @@ namespace CloudDentist.Controllers
                 }
                 else
                 {
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer",
                     HttpContext.Session.GetString("JWTtoken"));
@@ -204,7 +204,7 @@ namespace CloudDentist.Controllers
                 if (HttpContext.Session.GetString("Userrole") == "Admin" || HttpContext.Session.GetString("Userrole") == "Dokter")
                 {
 
-                    client.BaseAddress = new Uri("http://localhost:30512");
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer",
                     HttpContext.Session.GetString("JWTtoken"));
@@ -234,8 +234,8 @@ namespace CloudDentist.Controllers
             {
                 using (HttpClient client = new HttpClient())
                 {
-                   
-                    client.BaseAddress = new Uri("http://localhost:30512");
+
+                    client.BaseAddress = new Uri(Helpers.RestAPIAddress.GetUrl());
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                     HttpContext.Session.GetString("JWTtoken"));
                     //var token = HttpContext.Session.GetString("JWTtoken");
